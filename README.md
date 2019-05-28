@@ -1,2 +1,2 @@
 # md-2-thf
-MD-2-THF
+Conversor de arquivos `markdown` para componentes `Angular` utilizando recursos da biblioteca `THF`
