@@ -15,7 +15,7 @@ import * as templates from './templates';
  *
  * @param srcDir Diretório de origem de busca dos arquivos `markdown`.
  * @param destDir Diretório de destino onde serão criados os componentes.
- * @param options Opções customizadas de renderização e conversão dos componentes.
+ * @param options Configurações de renderização e conversão dos componentes.
  */
 export class Converter {
   private options: Options;
@@ -28,16 +28,24 @@ export class Converter {
     this.options = this.adjustOptions(options);
   }
 
+  /**
+   * Ajusta as configurações de conversão informadas com as configurações
+   * padrões.
+   *
+   * @param options Configurações de conversão informado.
+   * @returns Configurações de conversão ajustadas.
+   */
   private adjustOptions(options: Options): Options {
     options.exclusions.forEach((exclusion, i, exclusions) => (exclusions[i] = path.resolve(this.srcDir, exclusion)));
     return Object.assign(defaultOptions, options);
   }
 
+  /**
+   * Inicia a execução da conversão dos arquivos `markdown`.
+   */
   public execute() {
     const components = this.getMarkdownFiles()
-      .filter((file) => this.options.exclusions.indexOf(file) === -1)
       .map((file, i, l) => new Component(this.srcDir, this.options, file, i === l.length - 1 ? '' : ','));
-
     components.forEach((component) => this.createComponentFiles(component));
 
     this.createModuleFile(components);
@@ -168,6 +176,6 @@ export class Converter {
       .readdirSync(searchPath)
       .map((file) => path.join(searchPath, file))
       .flatMap((file) => (fs.statSync(file).isDirectory() ? this.getMarkdownFiles(file) : file))
-      .filter((file) => path.extname(file) === '.md');
+      .filter((file) => path.extname(file) === '.md' && this.options.exclusions.indexOf(file) === -1);
   }
 }

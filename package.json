@@ -1,6 +1,6 @@
 {
   "name": "md2thf",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Conversor de arquivos `markdown` para páginas `Angular` que utilizam a biblioteca `THF`",
   "main": "dist/index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "tsc": "node_modules/.bin/tsc",
     "prebuild": "npm run gulp -- prebuild",
     "build": "npm run tsc",
-    "postbuild": "npm run gulp -- postbuild"
+    "postbuild": "npm run gulp -- postbuild && npm pack ./dist"
   },
   "repository": {
     "type": "git",

@@ -12,6 +12,6 @@ if (process.mainModule.filename === __filename) {
  *
  * @param srcDir Diretório de origem de busca dos arquivos `markdown`.
  * @param destDir Diretório de destino onde serão criados os componentes.
- * @param options Opções customizadas de renderização dos componentes.
+ * @param options Configurações de renderização e conversão dos componentes.
  */
 export = (srcDir: string, destDir: string, options?: Options) => new Converter(srcDir, destDir, options).execute();
