@@ -244,3 +244,8 @@ Para que seja possível a visualização dos arquivos desta pasta pela aplicaç�
 
 [thf]: https://thf.totvs.com.br
 [thf-menu]: https://thf.totvs.com.br/documentation/thf-menu
+
+
+# Feito com md2thf
+
+Toda a área de documentação do portal [__TOTVS Java Framework__](https://tjf.totvs.com.br) foi desenvolvida utilizando o `md2thf`.
