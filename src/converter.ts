@@ -36,8 +36,9 @@ export class Converter {
    * @returns Configurações de conversão ajustadas.
    */
   private adjustOptions(options: Options): Options {
+    options = Object.assign(defaultOptions, options);
     options.exclusions.forEach((exclusion, i, exclusions) => (exclusions[i] = path.resolve(this.srcDir, exclusion)));
-    return Object.assign(defaultOptions, options);
+    return options;
   }
 
   /**
@@ -45,7 +46,7 @@ export class Converter {
    */
   public execute() {
     const components = this.getMarkdownFiles()
-      .map((file, i, l) => new Component(this.srcDir, this.options, file, i === l.length - 1 ? '' : ','));
+      .map((file, i, l) => new Component(this.srcDir, file, i === l.length - 1 ? '' : ',', this.options));
     components.forEach((component) => this.createComponentFiles(component));
 
     this.createModuleFile(components);
@@ -59,6 +60,7 @@ export class Converter {
    * @param component Objeto com as informações do componente.
    */
   private createComponentFiles(component: Component) {
+    // Deve ser criado um ThfRenderer a cada componente gerado.
     this.options.renderer = new ThfRenderer(this.options);
 
     const dir = this.createComponentDirectory(component.getPath());

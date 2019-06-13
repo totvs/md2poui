@@ -4,7 +4,7 @@ import { ThfRenderer } from './renderer';
 
 export interface Options extends MarkedOptions {
   /**
-   * @overrides
+   * @override
    */
   renderer?: ThfRenderer;
 

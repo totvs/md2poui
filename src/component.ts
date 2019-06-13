@@ -8,9 +8,9 @@ import { Options } from './options';
  * conversão do arquivo `markdown`.
  *
  * @param srcDir Diretório raiz de busca dos arquivos `markdown`.
- * @param options Opções customizadas de renderização e conversão dos componentes.
  * @param file Caminho completo do arquivo `markdown` que será convertido.
  * @param delimiter Delimitador que será utilizado nos _templates_.
+ * @param options Opções customizadas de renderização e conversão dos componentes.
  */
 export class Component {
   private file: string;
@@ -20,10 +20,14 @@ export class Component {
   private className: string;
   private title: string;
 
-  constructor(srcDir: string, options: Options, file: string, delimiter = ',') {
+  constructor(srcDir: string, file: string, delimiter = ',', options: Options) {
     this.file = file;
     this.delimiter = delimiter;
 
+    // Ajusta o caminho do componente conforme parâmetro "flatDirs".
+    // Exemplo:
+    //  true  - zoo/animals/zebra/
+    //  false - zebra/
     if (options.flatDirs) {
       this.path = path.dirname(path.relative(srcDir, file)).split(path.sep).pop();
     } else {

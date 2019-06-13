@@ -1,6 +1,6 @@
 {
   "name": "md2thf",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Conversor de arquivos `markdown` para páginas `Angular` que utilizam a biblioteca `THF`",
   "main": "dist/index.js",
   "scripts": {
@@ -29,6 +29,7 @@
   "dependencies": {
     "marked": "^0.6.2",
     "mustache": "^3.0.1",
+    "sanitize-html": "^1.20.1",
     "typescript": "^3.4.5",
     "uuid": "^3.3.2"
   },
@@ -36,6 +37,7 @@
     "@types/marked": "^0.6.5",
     "@types/mustache": "^0.8.32",
     "@types/node": "^12.0.2",
+    "@types/sanitize-html": "^1.20.0",
     "@types/uuid": "^3.4.4",
     "del": "^4.1.1",
     "gulp": "^4.0.2",
