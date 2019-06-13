@@ -1,5 +1,6 @@
 import { Renderer } from 'marked';
 import * as path from 'path';
+import sanitize from 'sanitize-html';
 import { v1 as uuidv1 } from 'uuid';
 
 import { Options } from '../options';
@@ -32,6 +33,9 @@ export class ThfRenderer extends Renderer {
     // Define o título do arquivo a partir do primeiro heading de nível 1.
     if (level === 1 && !this.data.title) {
       this.data.title = title;
+    } else if (level <= 3) {
+      const fragment = this.adjustTitleToFragment(title);
+      header = `<h${level} id="${fragment}"><a routerLink="." fragment="${fragment}">${title}</a></h${level}>`;
     } else {
       header = `<h${level}>${title}</h${level}>`;
     }
@@ -66,7 +70,6 @@ export class ThfRenderer extends Renderer {
     // adiciona a uma lista para que depois seja possível recuperar e fazer a
     // conversão destes arquivos.
     if (href.indexOf('http') < 0) file = this.addFile(href);
-
     return `<img src="${this.options.resourcePathName}/${file}" alt="${text}" />`;
   }
 
@@ -74,7 +77,15 @@ export class ThfRenderer extends Renderer {
    * @override
    */
   public link(href: string, title: string, text: string): string {
-    return `<a href="${href}" target="_blank">${text}</a>`;
+    let link: string;
+
+    if (href.indexOf('http') < 0 && href.indexOf('.md') >= 0) { // Está apontando para outro arquivo MD.
+      link = `<a routerLink="../${path.dirname(href).split('/').pop()}">${text}</a>`;
+    } else {
+      link = `<a href="${href}" target="_blank">${text}</a>`;
+    }
+
+    return link;
   }
 
   public getTitle(): string {
@@ -100,6 +111,21 @@ export class ThfRenderer extends Renderer {
     this.data.files = this.data.files || [];
     this.data.files.push({ from: file, to: guid });
     return guid;
+  }
+
+  private adjustTitleToFragment(title: string): string {
+    return sanitize(title, { allowedTags: [] })
+      .replace(/\,\s/g, ',')
+      .replace(/\s\(/g, '(')
+      .replace(/\s\)/g, ')')
+      .replace(/(\(\))/g, '')
+      .replace(/ {1,}/g, ' ')
+      .replace(/\s[^a-zA-Z0-9]/g, '')
+      .replace(/[\\\/\.\,\s\(]/g, '-')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z0-9-]/g, '')
+      .toLowerCase();
   }
 }
 

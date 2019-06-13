@@ -2,19 +2,17 @@
 
 Conversor de arquivos `markdown` para componentes `Angular` utilizando recursos da biblioteca [`THF`][thf].
 
-
 ## Instalação
 
 ```bash
-npm install md2thf
+npm install md2thf --save-dev
 ```
-
 
 ## Modo de uso
 
 ```javascript
 const md2thf = require('md2thf');
-md2thf('C:/pathFromMdFiles', 'C:/pathToAngularFiles')
+md2thf('C:/pathFromMdFiles', 'C:/pathToAngularFiles');
 ```
 
 ou
@@ -23,6 +21,18 @@ ou
 node md2thf C:/pathFromMdFiles C:/pathToAngularFiles
 ```
 
+## Release Notes
+
+### 1.0.2
+
+- **Correção** na verificação das configurações padrões. Se não fosse informado a configuração `exclusions` a execução era interrompida.
+- **Melhoria** na criação de links, agora é identificado se o link é externo ou interno. Se interno o conversor tenta gerar um link para uma rota do Angular.
+- **Melhoria** na criação de títulos, para os títulos de níveis abaixo de três são criadas âncoras para melhor navegação na página.
+
+### 1.0.1
+
+- Primeira versão!
+- Converte os arquivos Markdown para HTML e Typescript para aplicações Angular utilizando a bilioteca TOTVS HTML Framework.
 
 ## Parâmetros
 
@@ -30,21 +40,19 @@ node md2thf C:/pathFromMdFiles C:/pathToAngularFiles
 function md2thf(srcDir: string, destDir: string, options?: Options): void {}
 ```
 
-
 ### `srcDir`
 
 Diretório de origem dos arquivos `markdown` que serão convertidos. São considerados todos os arquivos com extensão `.md` encontrados na pasta raiz e nas subpastas do diretório informado.
 
-Exemplo: `C:/wiki`.
+Exemplo: `C:/zoologico`.
 
 ### `destDir`
 
 Diretório de destino dos arquivos `Angular` que serão criados a partir da conversão dos arquivos `markdown`.
 
-Exemplo: `C:/portal/src/app/wiki`.
+Exemplo: `C:/portal/src/app/zoologico`.
 
 > Arquivos existentes no diretório de destino não são excluídos.
-
 
 ### `options`
 
@@ -65,8 +73,7 @@ Objeto opcional com as configurações e definições customizadas de conversão
 Lista com os arquivos `markdown` que serão desconsiderados da conversão. O caminho informado nesta lista pode ser completo ou relativo ao diretório informado no parâmetro `srcDir`.
 
 Valor padrão: `[]`<br>
-Exemplo: `['C:/wiki/README.md', 'ignore/README.md']`.
-
+Exemplo: `['C:/zoologico/onca/README.md', 'chimpanze/README.md']`.
 
 ### `options.flatDirs`
 
@@ -79,48 +86,51 @@ Exemplo:
 
 ```
 C:\
-└── wiki\
-    ├── README.md
-    ├── samples\
-    │   ├── sampleOne\
+└── zoologico\
+    └── animais\
+    │   └── leao\
     │   |   ├── README.md
-    │   ├── sampleTwo\
+    │   └── zebra\
     │   |   ├── README.md
-    ├── howTo\
+    └── atracoes\
     │   ├── README.md
+    ├── README.md
 ```
 
 `destDir` com `options.flatDirs=true`
 
 ```
-C:\
-└── portal/
-    ├── wiki/
-    |   ├── sampleOne/
-    │   |   ├── sampleone.component.ts
-    │   ├── sampleTwo/
-    │   |   ├── sampletwo.component.ts
-    |   ├── howTo/
-    │   |   ├── howto.component.ts
-    │   ├── wiki.component.ts
+C:\portal\src\app\
+└── zoologico/
+    └── leao/
+    │   ├── leao.component.ts
+    └── zebra/
+    │   ├── zebra.component.ts
+    └── atracoes/
+    │   ├── atracoes.component.ts
+    ├── zoologico.component.ts
+    ├── zoologico.module.ts
+    ├── zoologico.service.ts
+    ├── zoologico-routing.module.ts
 ```
 
 `destDir` com `options.flatDirs=false`
 
 ```
-C:\
-└── portal/
-    ├── wiki/
-    |   ├── samples/
-    │   |   ├── sampleOne/
-    │   |   |   ├── sampleone.component.ts
-    │   |   ├── sampleTwo/
-    │   |   |   ├── sampletwo.component.ts
-    |   ├── howTo/
-    │   |   ├── howto.component.ts
-    │   ├── wiki.component.ts
+C:\portal\src\app\
+└── zoologico/
+    └── animais/
+    │   └── leao/
+    │   |   ├── leao.component.ts
+    │   └── zebra/
+    │   |   ├── zebra.component.ts
+    └── atracoes/
+    │   ├── atracoes.component.ts
+    ├── zoologico.component.ts
+    ├── zoologico.module.ts
+    ├── zoologico.service.ts
+    ├── zoologico-routing.module.ts
 ```
-
 
 ### `options.moduleName`
 
@@ -129,7 +139,6 @@ Nome do módulo `Angular` que será criado para agrupar os componentes gerados a
 Valor padrão: `wiki`.
 
 > O nome do módulo deve ser informado em `CamelCase`.
-
 
 ### `options.resourceFolderName`
 
@@ -141,10 +150,7 @@ Valor padrão: `resources`.
 
 > Esta pasta deve ser incluída como `asset` da aplicação `Angular`.
 
-> Geralmente estes arquivos são imagens referenciadas pela marcação `markdown` ou `HTML`, como nos exemplos abaixo:<br>
-> `![Minha Imagem](imagens/minhaImagem.png)` ou<br>
-> `<img alt="Minha Imagem" src="imagens/minhaImagem.png" />`
-
+> Geralmente estes arquivos são imagens referenciadas pela marcação `markdown` ou `HTML`, como nos exemplos abaixo:<br> > `![Minha Imagem](imagens/minhaImagem.png)` ou<br> > `<img alt="Minha Imagem" src="imagens/minhaImagem.png" />`
 
 ### `options.resourcePathName`
 
@@ -154,8 +160,7 @@ Padrão: `app/src/wiki/resources`.
 
 > Este caminho deve ser acessível pela aplicação `Angular`.
 
-
-## Outros recursos
+## Facilitadores
 
 Além da conversão e criação dos componentes `Angular` são criados mais três arquivos auxiliares: módulo, roteamento e serviço.
 
@@ -225,7 +230,6 @@ export class WikiService {
 }
 ```
 
-
 ## Visualização dos arquivos externos
 
 Todos os arquivos externos referenciados nos arquivos `markdown` são copiados para a pasta de recursos (conforme parâmetro `options.resourceFolderName`) com outro nome gerado dinâmicamente.
@@ -237,15 +241,14 @@ Para que seja possível a visualização dos arquivos desta pasta pela aplicaç�
   "assets": [
     "src/favicon.ico",
     "src/assets",
-    "src/app/wiki/resources"
+    "src/app/zoologico/resources"
   ]
 }
 ```
 
+## Feito com md2thf
+
+Toda a área de documentação do portal [**TOTVS Java Framework**](https://tjf.totvs.com.br) foi desenvolvida utilizando o `md2thf`.
+
 [thf]: https://thf.totvs.com.br
 [thf-menu]: https://thf.totvs.com.br/documentation/thf-menu
-
-
-# Feito com md2thf
-
-Toda a área de documentação do portal [__TOTVS Java Framework__](https://tjf.totvs.com.br) foi desenvolvida utilizando o `md2thf`.
