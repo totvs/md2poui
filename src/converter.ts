@@ -4,7 +4,7 @@ import mustache from 'mustache';
 import * as path from 'path';
 
 import { Component } from './component';
-import { Transform } from './helpers';
+import { Transform, TransformIcon } from './helpers';
 import { defaultOptions, Options } from './options';
 import { MarkdownFile, ThfRenderer } from './renderer';
 import * as templates from './templates';
@@ -112,7 +112,8 @@ export class Converter {
    * @returns Conteúdo da _view_ do componente renderizado.
    */
   private renderComponentView(component: Component) {
-    const content = marked(fs.readFileSync(component.getFile(), 'utf-8'), this.options);
+    const markdown = TransformIcon.convert(fs.readFileSync(component.getFile(), 'utf-8'));
+    const content = marked(markdown, this.options);
 
     component.setTitle(this.options.renderer.getTitle());
     return mustache.render(templates.componentView, { title: component.getTitle(), content });

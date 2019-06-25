@@ -1,4 +1,4 @@
-# md2thf
+﻿# md2thf
 
 Conversor de arquivos `markdown` para componentes `Angular` utilizando recursos da biblioteca [`THF`][thf].
 
@@ -22,6 +22,11 @@ node md2thf C:/pathFromMdFiles C:/pathToAngularFiles
 ```
 
 ## Release Notes
+
+### 1.1.0
+
+- **Nova Funcionalidade** na parte de conversão, agora o md2thf irá converter os icones no padrão do Github para o html. 
+Exemplo: `:warning:` será :warning:.
 
 ### 1.0.2
 
