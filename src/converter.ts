@@ -49,9 +49,11 @@ export class Converter {
       .map((file, i, l) => new Component(this.srcDir, file, i === l.length - 1 ? '' : ',', this.options));
     components.forEach((component) => this.createComponentFiles(component));
 
-    this.createModuleFile(components);
-    this.createRouterFile(components);
-    this.createServicFile(components);
+    if (this.options.createHelpers) {
+      this.createModuleFile(components);
+      this.createRouterFile(components);
+      this.createServicFile(components);
+    }
   }
 
   /**
@@ -72,11 +74,13 @@ export class Converter {
     fs.writeFileSync(path.join(dir, `${component.getName()}.component.html`), html, 'utf-8');
 
     // Efetua a cópia dos arquivos externos.
-    this.copyFiles(
-      path.dirname(component.getFile()),
-      path.join(this.destDir, this.options.resourceFolderName),
-      this.options.renderer.getFiles()
-    );
+    if (this.options.copyExternalFiles) {
+      this.copyFiles(
+        path.dirname(component.getFile()),
+        path.join(this.destDir, this.options.resourceFolderName),
+        this.options.renderer.getFiles()
+      );
+    }
   }
 
   /**

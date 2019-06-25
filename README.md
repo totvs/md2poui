@@ -30,6 +30,9 @@ node md2thf C:/pathFromMdFiles C:/pathToAngularFiles
 
 - **Nova Funcionalidade** na parte de conversão, agora o md2thf irá converter os icones no padrão do Github para o html. 
 Exemplo: `:warning:` será :warning:.
+- **Melhoria**: incluídas as opções de configuração `createHelpers` e `copyExternalFiles`.
+
+> Maiores detalhes no item [`options`](#options).
 
 ### 1.0.2
 
@@ -140,6 +143,12 @@ C:\portal\src\app\
     ├── zoologico-routing.module.ts
 ```
 
+### `options.createHelpers`
+
+Se verdadeiro, irá criar os arquivos auxiliares de `module`, `routing` e `service` e irá utilizar o parâmetro [`options.moduleName`](#options.moduleName) para a criação do nome do módulo Angular.
+
+Valor padrão: `true`.
+
 ### `options.moduleName`
 
 Nome do módulo `Angular` que será criado para agrupar os componentes gerados a partir da conversão dos arquivos `markdown`.
@@ -147,6 +156,12 @@ Nome do módulo `Angular` que será criado para agrupar os componentes gerados a
 Valor padrão: `wiki`.
 
 > O nome do módulo deve ser informado em `CamelCase`.
+
+### `options.copyExternalFiles`
+
+Se verdadeiro, irá copiar os arquivos externos referenciados nos arquivos `markdown` para a pasta de recursos, cujo nome poderá ser definido no parâmetro [`options.resourceFolderName`](#options.resourceFolderName).
+
+Valor padrão: `true`.
 
 ### `options.resourceFolderName`
 
