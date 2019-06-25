@@ -26,11 +26,15 @@ node md2thf C:/pathFromMdFiles C:/pathToAngularFiles
 
 ## Release Notes
 
+### 1.1.1 e 1.1.2
+
+- **Correção** nas dependências utilizadas.
+
 ### 1.1.0
 
-- **Nova Funcionalidade** na parte de conversão, agora o md2thf irá converter os icones no padrão do Github para o html. 
+- **Nova Funcionalidade** na parte de conversão, agora o md2thf irá converter os icones no padrão do GitHub para o HTML.
 Exemplo: `:warning:` será :warning:.
-- **Melhoria**: incluídas as opções de configuração `createHelpers` e `copyExternalFiles`.
+- **Melhoria** incluída nas opções de configuração (`createHelpers` e `copyExternalFiles`).
 
 > Maiores detalhes no item [`options`](#options).
 
