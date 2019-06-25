@@ -26,7 +26,7 @@ node md2thf C:/pathFromMdFiles C:/pathToAngularFiles
 ### 1.1.0
 
 - **Nova Funcionalidade** na parte de conversão, agora o md2thf irá converter os icones no padrão do Github para o html. 
-Exemplo: "`:warning:`" será :warning:.
+Exemplo: `:warning:` será :warning:.
 
 ### 1.0.2
 
