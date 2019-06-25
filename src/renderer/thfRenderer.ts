@@ -47,15 +47,18 @@ export class ThfRenderer extends Renderer {
    * @override
    */
   public html(html: string): string {
+
     // Verifica se o HTML possui algum caminho relativo a qualquer arquivo e
     // adiciona a uma lista para que depois seja possível recuperar e fazer a
     // conversão destes arquivos.
-    const matches = /src=\"([^']*?)\"/g.exec(html);
-    matches
-      .slice(1)
-      .filter((m, i, l) => l.indexOf(m) === i) // Remove arquivos duplicados.
-      .filter((m) => m.indexOf('http') < 0) // Somente arquivos "internos".
-      .forEach((match) => (html = html.replace(new RegExp(match, 'g'), `${this.options.resourcePathName}/${this.addFile(match)}`)));
+    if (this.options.copyExternalFiles) {
+      const matches = /src=\"([^']*?)\"/g.exec(html);
+      matches
+        .slice(1)
+        .filter((m, i, l) => l.indexOf(m) === i) // Remove arquivos duplicados.
+        .filter((m) => m.indexOf('http') < 0) // Somente arquivos "internos".
+        .forEach((match) => (html = html.replace(new RegExp(match, 'g'), `${this.options.resourcePathName}/${this.addFile(match)}`)));
+    }
 
     return html;
   }
@@ -69,8 +72,12 @@ export class ThfRenderer extends Renderer {
     // Verifica se a imagem possui algum caminho relativo a qualquer arquivo e
     // adiciona a uma lista para que depois seja possível recuperar e fazer a
     // conversão destes arquivos.
-    if (href.indexOf('http') < 0) file = this.addFile(href);
-    return `<img src="${this.options.resourcePathName}/${file}" alt="${text}" />`;
+    if (this.options.copyExternalFiles && href.indexOf('http') < 0) {
+      file = this.addFile(href);
+      file = `${this.options.resourcePathName}/${file}`;
+    }
+
+    return `<img src="${file}" alt="${text}" />`;
   }
 
   /**
