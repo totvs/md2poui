@@ -1,4 +1,7 @@
-﻿# md2thf
+[![Node.js](https://img.shields.io/badge/Node.js-+12-green.svg?logo=Node.js)](https://nodejs.org)
+<br/>Este projeto utiliza a versão do Node.js 12 ou superior.
+
+# md2thf
 
 Conversor de arquivos `markdown` para componentes `Angular` utilizando recursos da biblioteca [`THF`][thf].
 
