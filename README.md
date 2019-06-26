@@ -8,6 +8,12 @@ Conversor de arquivos `markdown` para componentes `Angular` utilizando recursos 
 ## Instalação
 
 ```bash
+npm install md2thf -g
+```
+
+ou
+
+```bash
 npm install md2thf --save-dev
 ```
 
@@ -21,22 +27,26 @@ md2thf('C:/pathFromMdFiles', 'C:/pathToAngularFiles');
 ou
 
 ```bash
-node md2thf C:/pathFromMdFiles C:/pathToAngularFiles
+md2thf C:/pathFromMdFiles C:/pathToAngularFiles
 ```
 
 ## Release Notes
 
+### 1.2.0
+
+- Agora é possível executar o md2thf "globalmente" via linha de comando!
+
 ### 1.1.1 e 1.1.2
 
-- **Correção** nas dependências utilizadas.
+- **Correção** nas dependências utilizadas pelo projeto.
 
 ### 1.1.0
 
-- **Nova Funcionalidade** na parte de conversão, agora o md2thf irá converter os icones no padrão do GitHub para o HTML.
-Exemplo: `:warning:` será :warning:.
-- **Melhoria** incluída nas opções de configuração (`createHelpers` e `copyExternalFiles`).
+- **Nova funcionalidade** na conversão de icones para o padrão do GitHub.
+<br/>Exemplo: `:warning:` será :warning:.
 
-> Maiores detalhes no item [`options`](#options).
+- Incluídas novas opções de configuração `createHelpers` e `copyExternalFiles`.
+  > Mais informações disponíveis no item [`options`](#options).
 
 ### 1.0.2
 
@@ -47,7 +57,7 @@ Exemplo: `:warning:` será :warning:.
 ### 1.0.1
 
 - Primeira versão!
-- Converte os arquivos Markdown para HTML e Typescript para aplicações Angular utilizando a bilioteca TOTVS HTML Framework.
+- Converte os arquivos markdown para componentes Angular (HTML e Typescript) utilizando a bilioteca TOTVS HTML Framework.
 
 ## Parâmetros
 
