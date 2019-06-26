@@ -1,8 +1,8 @@
 {
   "name": "md2thf",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Conversor de arquivos `markdown` para páginas `Angular` que utilizam a biblioteca `THF`",
-  "main": "dist/index.js",
+  "main": "index.js",
   "scripts": {
     "gulp": "node_modules/.bin/gulp",
     "tsc": "node_modules/.bin/tsc",
@@ -10,6 +10,7 @@
     "build": "npm run tsc",
     "postbuild": "npm run gulp -- postbuild && npm pack ./dist"
   },
+  "bin": "bin/md2thf.js",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/totvs/md2thf.git"
@@ -32,7 +33,8 @@
     "node-emoji": "^1.10.0",
     "sanitize-html": "^1.20.1",
     "typescript": "^3.4.5",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "yargs": "^13.2.4"
   },
   "devDependencies": {
     "@types/marked": "^0.6.5",
@@ -41,6 +43,7 @@
     "@types/node-emoji": "^1.8.1",
     "@types/sanitize-html": "^1.20.0",
     "@types/uuid": "^3.4.4",
+    "@types/yargs": "^13.0.0",
     "del": "^4.1.1",
     "gulp": "^4.0.2",
     "gulp-uglify": "^3.0.2"

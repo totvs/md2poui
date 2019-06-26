@@ -1,11 +1,6 @@
 import { Converter } from './converter';
 import { Options } from './options';
 
-if (process.mainModule.filename === __filename) {
-  const arg = process.argv.splice(2);
-  new Converter(arg[0], arg[1]).execute();
-}
-
 /**
  * Executa a criação dos componentes `Angular/THF` gerados a partir dos
  * arquivos `markdown` encontrados no diretório de origem.
