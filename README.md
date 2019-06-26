@@ -77,7 +77,9 @@ Objeto opcional com as configurações e definições customizadas de conversão
 {
   exclusions: string[] = [],
   flatDirs: boolean = false,
+  createHelpers: boolean = true,
   moduleName: string = 'wiki',
+  copyExternalFiles: boolean = true,
   resourceFolderName: string = 'resources',
   resourcePathName: string = 'src/app/wiki/resources'
 }
