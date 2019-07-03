@@ -6,18 +6,24 @@ import { Converter } from '../converter';
 const argv = yargs
   .locale('pt_BR')
   .command('$0 <source> <destination> [options]', 'Converte arquivos markdown para componentes Angular utilizando a biblioteca THF', (args) => {
-    return args.positional('source', {
-      describe: 'Diretório de origem dos arquivos markdown',
-      type: 'string'
-    }).positional('destination', {
-      describe: 'Diretório de destino dos componentes Angular',
-      type: 'string'
-    });
+    return args
+      .positional('source', {
+        describe: 'Diretório de origem dos arquivos markdown',
+        type: 'string'
+      })
+      .positional('destination', {
+        describe: 'Diretório de destino dos componentes Angular',
+        type: 'string'
+      });
   })
   .options({
     exclusions: {
       describe: 'Lista com os arquivos markdown que serão desconsiderados da conversão.',
       type: 'array'
+    },
+    highlightClassName: {
+      describe: 'Nome da classe que será utilizada nos trechos contendo códigos de exemplos.',
+      type: 'string'
     },
     flatDirs: {
       describe: 'Se verdadeiro, criará todas as pastas de componente na pasta raíz de destino.',
@@ -48,6 +54,7 @@ const argv = yargs
 
 const options: Options = {};
 options.exclusions = (argv.exclusions || []) as string[];
+options.highlightClassName = argv.highlightClassName;
 options.flatDirs = argv.flatDirs;
 options.createHelpers = argv.createHelpers;
 options.moduleName = argv.moduleName;

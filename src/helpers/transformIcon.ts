@@ -1,10 +1,9 @@
 import emoji from 'node-emoji';
 
 export class TransformIcon {
-
   /**
-   * Converte um icone delimitado por `:` (dois pontos) para o icone no padrão do github. 
-   * Exemplo: ":warning:" será "⚠️"
+   * Converte um icone delimitado por `:` (dois pontos) para o icone no padrão do github.
+   * Exemplo: ":warning:" será "⚠️".
    *
    * @param text Texto a ser convertido
    * @return Texto convertido.

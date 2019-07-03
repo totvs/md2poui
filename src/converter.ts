@@ -36,7 +36,7 @@ export class Converter {
    * @returns Configurações de conversão ajustadas.
    */
   private adjustOptions(options: Options): Options {
-    options = Object.assign(defaultOptions, options);
+    options = Object.assign({}, defaultOptions, options);
     options.exclusions.forEach((exclusion, i, exclusions) => (exclusions[i] = path.resolve(this.srcDir, exclusion)));
     return options;
   }
@@ -179,10 +179,19 @@ export class Converter {
    * @returns Lista dos arquivos `markdown` encontrados.
    */
   private getMarkdownFiles(searchPath = this.srcDir): string[] {
-    return fs
-      .readdirSync(searchPath)
-      .map((file) => path.join(searchPath, file))
-      .flatMap((file) => (fs.statSync(file).isDirectory() ? this.getMarkdownFiles(file) : file))
-      .filter((file) => path.extname(file) === '.md' && this.options.exclusions.indexOf(file) === -1);
+    const isFile = fs.statSync(searchPath).isFile();
+    let files: string[];
+
+    if (isFile) {
+      files = [searchPath];
+    } else {
+      files = fs
+        .readdirSync(searchPath)
+        .map((file) => path.join(searchPath, file))
+        .flatMap((file) => (fs.statSync(file).isDirectory() && this.options.recursive ? this.getMarkdownFiles(file) : file))
+        .filter((file) => path.extname(file) === '.md' && this.options.exclusions.indexOf(file) === -1);
+    }
+
+    return files;
   }
 }

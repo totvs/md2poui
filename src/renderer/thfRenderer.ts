@@ -14,7 +14,7 @@ export class ThfRenderer extends Renderer {
    * @override
    */
   public code(code: string, language: string): string {
-    return `<pre><code class="highlight language ${language}">${this.escapeCode(code)}</code></pre>`;
+    return `<pre><code class="${this.options.highlightClassName} ${language}">${this.escapeCode(code)}</code></pre>`;
   }
 
   /**
