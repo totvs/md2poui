@@ -1,7 +1,7 @@
 {
   "name": "md2thf",
-  "version": "1.2.0",
-  "description": "Conversor de arquivos `markdown` para páginas `Angular` que utilizam a biblioteca `THF`",
+  "version": "1.2.2",
+  "description": "Conversor de arquivos markdown para páginas Angular que utilizam a biblioteca TOTVS HTML Framework (THF)",
   "main": "index.js",
   "scripts": {
     "gulp": "node_modules/.bin/gulp",
@@ -21,7 +21,7 @@
     "angular",
     "thf"
   ],
-  "author": "TOTVS",
+  "author": "Rubens Dos Santos Filho",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/totvs/md2thf/issues"

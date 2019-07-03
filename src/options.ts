@@ -14,12 +14,31 @@ export interface Options extends MarkedOptions {
   exclusions?: string[];
 
   /**
+   * Nome da classe que será utilizada nos trechos contendo códigos de exemplos
+   * utilizado pela tag `<code>`.
+   *
+   * Obs: independente desta configuração, a classe contendo o nome da
+   * linguagem do trecho do código sempre é inserida .
+   *
+   * Valor padrão: `'highlight'`.
+   */
+  highlightClassName?: string;
+
+  /**
    * Verdadeiro para criar todos as pastas dos componentes na pasta raíz de
    * destino.
    *
    * Valor padrão: `true`.
    */
   flatDirs?: boolean;
+
+  /**
+   * Verdadeiro para ler recursivamente todas as pastas abaixo da pasta de
+   * origem informada.
+   *
+   * Valor padrão: `true`.
+   */
+  recursive?: boolean;
 
   /**
    * Verdadeiro para criar os arquivos auxiliares `module`, `routing` e
@@ -64,7 +83,9 @@ export interface Options extends MarkedOptions {
 
 export const defaultOptions: Options = {
   exclusions: [],
+  highlightClassName: 'highlight',
   flatDirs: true,
+  recursive: true,
   createHelpers: true,
   moduleName: 'wiki',
   copyExternalFiles: true,

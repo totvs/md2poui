@@ -3,7 +3,7 @@
 
 # md2thf
 
-Conversor de arquivos `markdown` para componentes `Angular` utilizando recursos da biblioteca [`THF`][thf].
+Conversor de arquivos `markdown` para componentes `Angular` utilizando recursos da biblioteca [`TOTVS HTML Framework (THF)`][thf].
 
 ## Instalação
 
@@ -32,6 +32,12 @@ md2thf C:/pathFromMdFiles C:/pathToAngularFiles
 
 ## Release Notes
 
+### 1.2.1, 1.2.2
+
+- Incluídas novas opções de configuração `recursive` e `highlightClassName`.
+  > Mais informações disponíveis no item [`options`](#options).
+- Agora é possível informar diretamente um arquivo `markdown` e não apenas uma pasta no parâmetro de origem.
+
 ### 1.2.0
 
 - Agora é possível executar o md2thf "globalmente" via linha de comando!
@@ -42,8 +48,7 @@ md2thf C:/pathFromMdFiles C:/pathToAngularFiles
 
 ### 1.1.0
 
-- **Nova funcionalidade** na conversão de icones para o padrão do GitHub.
-<br/>Exemplo: `:warning:` será :warning:.
+- **Nova funcionalidade** na conversão de ícones para o padrão do GitHub.<br/>Exemplo: `:warning:` será :warning:.
 
 - Incluídas novas opções de configuração `createHelpers` e `copyExternalFiles`.
   > Mais informações disponíveis no item [`options`](#options).
@@ -86,7 +91,9 @@ Objeto opcional com as configurações e definições customizadas de conversão
 ```typescript
 {
   exclusions: string[] = [],
+  highlightClassName: 'highlight',
   flatDirs: boolean = false,
+  recursive: boolean = true,
   createHelpers: boolean = true,
   moduleName: string = 'wiki',
   copyExternalFiles: boolean = true,
@@ -101,6 +108,14 @@ Lista com os arquivos `markdown` que serão desconsiderados da conversão. O cam
 
 Valor padrão: `[]`<br>
 Exemplo: `['C:/zoologico/onca/README.md', 'chimpanze/README.md']`.
+
+### `options.highlightClassName`
+
+Nome da classe que será utilizada nos trechos contendo códigos de exemplos utilizado pela tag `<code>`.
+
+> Independente desta configuração, a classe contendo o nome da linguagem do trecho do código sempre é inserida.
+
+Valor padrão: `highlight`.
 
 ### `options.flatDirs`
 
@@ -158,6 +173,12 @@ C:\portal\src\app\
     ├── zoologico.service.ts
     ├── zoologico-routing.module.ts
 ```
+
+### `options.recursive`
+
+Se verdadeiro, irá ler recursivamente todas as pastas abaixo da pasta de origem informada.
+
+Valor padrão: `true`.
 
 ### `options.createHelpers`
 
