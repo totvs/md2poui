@@ -9,72 +9,78 @@ export interface Options extends MarkedOptions {
   renderer?: ThfRenderer;
 
   /**
-   * Lista dos arquivos que não serão considerados na conversão.
+   * Verdadeiro para criar os componentes utilizando visual do **PortinariUi**.
+   *
+   * Valor padrão: `false`.
+   */
+  portinariUi?: boolean;
+
+  /**
+   * Lista dos arquivos ou pastas que não serão considerados na conversão.
    */
   exclusions?: string[];
 
   /**
-   * Nome da classe que será utilizada nos trechos contendo códigos de exemplos
-   * utilizado pela tag `<code>`.
+   * Nome da classe `CSS` que será utilizada nos trechos de códigos de exemplo.
    *
    * Obs: independente desta configuração, a classe contendo o nome da
-   * linguagem do trecho do código sempre é inserida .
+   * linguagem sempre é inserida.
    *
    * Valor padrão: `'highlight'`.
    */
   highlightClassName?: string;
 
   /**
-   * Verdadeiro para criar todos as pastas dos componentes na pasta raíz de
-   * destino.
+   * Verdadeiro para criar as pastas de componentes na raíz da pasta destino.
    *
    * Valor padrão: `true`.
    */
   flatDirs?: boolean;
 
   /**
-   * Verdadeiro para ler recursivamente todas as pastas abaixo da pasta de
-   * origem informada.
+   * Verdadeiro para ler recursivamente as pastas abaixo da pasta de origem.
    *
    * Valor padrão: `true`.
    */
   recursive?: boolean;
 
   /**
-   * Verdadeiro para criar os arquivos auxiliares `module`, `routing` e
-   * `service`.
+   * Verdadeiro para criar os arquivos auxiliares de módulo, rotas e serviço.
    *
    * Valor padrão: `true`.
    */
   createHelpers?: boolean;
 
   /**
-   * Nome do módulo `Angular` que será criado para agrupar os componentes
-   * gerados.
+   * Nome do módulo `Angular` que será criado para agrupar os componentes.
    *
-   * Valor padrão: `'wiki'`.
+   * Valor padrão: `'docs'`.
    */
   moduleName?: string;
 
   /**
-   * Verdadeiro para copiar arquivos externos referenciados nos arquivos
-   * `markdown`.
+   * Caminho da rota pai que será utilizado para as rotas dos componentes.
+   * 
+   * Valor padrão: `docs`.
+   */
+  parentRoutePath?: string;
+
+  /**
+   * Verdadeiro para copiar os arquivos externos.
    *
    * Valor padrão: `true`.
    */
   copyExternalFiles?: boolean;
 
   /**
-   * Pasta onde serão copiados os arquivos externos encontrados nos
-   * arquivos `markdown`.
+   * Nome da pasta para armazenamento dos arquivos externos.
    *
    * Valor padrão: `'assets'`.
    */
   resourceFolderName?: string;
 
   /**
-   * Caminho que será utilizado no `HTML` convertido para substituir os
-   * caminhos originais encontrado nos arquivos `markdown`.
+   * Caminho que será utilizado para referenciar os arquivos externos.
    *
    * Valor padrão: `'assets'`.
    */
@@ -82,13 +88,15 @@ export interface Options extends MarkedOptions {
 }
 
 export const defaultOptions: Options = {
+  portinariUi: false,
   exclusions: [],
   highlightClassName: 'highlight',
   flatDirs: true,
   recursive: true,
   createHelpers: true,
-  moduleName: 'wiki',
+  moduleName: 'docs',
+  parentRoutePath: 'docs',
   copyExternalFiles: true,
   resourceFolderName: 'assets',
-  resourcePathName: 'assets'
+  resourcePathName: 'app/docs/assets'
 };

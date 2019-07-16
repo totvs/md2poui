@@ -47,7 +47,6 @@ export class ThfRenderer extends Renderer {
    * @override
    */
   public html(html: string): string {
-
     // Verifica se o HTML possui algum caminho relativo a qualquer arquivo e
     // adiciona a uma lista para que depois seja possível recuperar e fazer a
     // conversão destes arquivos.
@@ -61,6 +60,21 @@ export class ThfRenderer extends Renderer {
     }
 
     return html;
+  }
+
+  /**
+   * @override
+   */
+  public list(body: string, ordered: boolean, start: number) {
+    let element: string;
+
+    if (ordered) {
+      element = `<ol class="${this.getTextClassName()}" start="${start}">${body}</ol>`;
+    } else {
+      element = `<ul class="${this.getTextClassName()}">${body}</ul>`;
+    }
+
+    return element;
   }
 
   /**
@@ -86,13 +100,21 @@ export class ThfRenderer extends Renderer {
   public link(href: string, title: string, text: string): string {
     let link: string;
 
-    if (href.indexOf('http') < 0 && href.indexOf('.md') >= 0) { // Está apontando para outro arquivo MD.
+    if (href.indexOf('http') < 0 && href.indexOf('.md') >= 0) {
+      // Está apontando para outro arquivo MD.
       link = `<a routerLink="../${path.dirname(href).split('/').pop()}">${text}</a>`;
     } else {
       link = `<a href="${href}" target="_blank">${text}</a>`;
     }
 
     return link;
+  }
+
+  /**
+   * @override
+   */
+  public paragraph(text: string): string {
+    return `<p class="${this.getTextClassName()}">${text}</p>`;
   }
 
   public getTitle(): string {
@@ -133,6 +155,10 @@ export class ThfRenderer extends Renderer {
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/[^a-zA-Z0-9-]/g, '')
       .toLowerCase();
+  }
+
+  private getTextClassName(): string {
+    return this.options.portinariUi ? 'po-font-text' : 'thf-font-text';
   }
 }
 

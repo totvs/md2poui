@@ -1,5 +1,8 @@
-export const service = `import { Injectable } from '@angular/core';
-import { ThfMenuItem } from '@totvs/thf-ui';
+import { globals } from '../helpers';
+
+export const service = () => {
+  return `import { Injectable } from '@angular/core';
+${getMenuItemImport()};
 
 @Injectable({
   providedIn: 'root'
@@ -7,14 +10,24 @@ import { ThfMenuItem } from '@totvs/thf-ui';
 export class {{moduleClassName}}Service {
   constructor() {}
 
-  public get{{moduleClassName}}MenuItems(): ThfMenuItem[] {
-    return [
-      {{#components}}
-      {
-        label: '{{title}}',
-        link: '{{moduleName}}/{{name}}'
-      }{{delimiter}}
-      {{/components}}
-    ];
+  public getMenuItems(): ${getMenuItemClass()}[] {
+    return {{&menuItems}};
   }
 }`;
+};
+
+function getMenuItemImport() {
+  let menuItem: string;
+
+  if (globals.args.options.portinariUi) {
+    menuItem = `import { PoMenuItem } from '@portinari/portinari-ui'`;
+  } else {
+    menuItem = `import { ThfMenuItem } from '@totvs/thf-ui'`;
+  }
+
+  return menuItem;
+}
+
+function getMenuItemClass() {
+  return globals.args.options.portinariUi ? 'PoMenuItem' : 'ThfMenuItem';
+}

@@ -1,4 +1,5 @@
-export const routing = `import { NgModule } from '@angular/core';
+export const routing = () => {
+  return `import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 {{#components}}
@@ -10,8 +11,12 @@ const routes: Routes = [
   {
     path: '{{name}}',
     component: {{className}}Component
-  }{{delimiter}}
+  },
   {{/components}}
+  {
+    path: '**',
+    redirectTo: '{{components.0.name}}'
+  }
 ];
 
 @NgModule({
@@ -19,3 +24,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class {{moduleClassName}}RoutingModule {}`;
+};

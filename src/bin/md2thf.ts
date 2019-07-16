@@ -1,22 +1,21 @@
 #! /usr/bin/env node
 import yargs from 'yargs';
+
+import md2thf from '..';
 import { Options } from '../options';
-import { Converter } from '../converter';
 
 const argv = yargs
   .locale('pt_BR')
-  .command('$0 <source> <destination> [options]', 'Converte arquivos markdown para componentes Angular utilizando a biblioteca THF', (args) => {
+  .command('$0 <source> <destination> [options]', 'Converte arquivos markdown para componentes Angular utilizando a biblioteca THF', args => {
     return args
-      .positional('source', {
-        describe: 'Diretório de origem dos arquivos markdown',
-        type: 'string'
-      })
-      .positional('destination', {
-        describe: 'Diretório de destino dos componentes Angular',
-        type: 'string'
-      });
+      .positional('source', { describe: 'Diretório de origem dos arquivos markdown', type: 'string' })
+      .positional('destination', { describe: 'Diretório de destino dos componentes Angular', type: 'string' });
   })
   .options({
+    portinariUi: {
+      describe: 'Verdadeiro para criar os componentes utilizando o visual do PortinariUi.',
+      type: 'boolean'
+    },
     exclusions: {
       describe: 'Lista com os arquivos markdown que serão desconsiderados da conversão.',
       type: 'array'
@@ -37,8 +36,13 @@ const argv = yargs
       describe: 'Nome do módulo Angular que será criado para agrupar os componentes gerados.',
       type: 'string'
     },
+    parentRoutePath: {
+      describe: 'Caminho da rota pai que será utilizado para as rotas dos componentes.',
+      type: 'string'
+    },
     copyExternalFiles: {
-      describe: 'Se verdadeiro, irá copiar os arquivos externos referenciados nos arquivos markdown para uma pasta de recursos.',
+      describe:
+        'Se verdadeiro, irá copiar os arquivos externos referenciados nos arquivos markdown para uma pasta de recursos.',
       type: 'boolean'
     },
     resourceFolderName: {
@@ -53,6 +57,7 @@ const argv = yargs
   .help().argv;
 
 const options: Options = {};
+options.portinariUi = argv.portinariUi;
 options.exclusions = (argv.exclusions || []) as string[];
 options.highlightClassName = argv.highlightClassName;
 options.flatDirs = argv.flatDirs;
@@ -61,4 +66,5 @@ options.moduleName = argv.moduleName;
 options.copyExternalFiles = argv.copyExternalFiles;
 options.resourceFolderName = argv.resourceFolderName;
 options.resourcePathName = argv.resourcePathName;
-new Converter(argv.source as string, argv.destination as string, options).execute();
+
+md2thf(argv.source as string, argv.destination as string, options);

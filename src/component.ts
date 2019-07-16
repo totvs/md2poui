@@ -1,16 +1,13 @@
 import * as path from 'path';
 
-import { Transform } from './helpers';
-import { Options } from './options';
+import { globals, Transform } from './helpers';
 
 /**
- * Classe com as informações do componente que será criado a partir da
- * conversão do arquivo `markdown`.
+ * Informações do componente que será criado a partir da conversão do arquivo
+ * `markdown`.
  *
- * @param srcDir Diretório raiz de busca dos arquivos `markdown`.
  * @param file Caminho completo do arquivo `markdown` que será convertido.
  * @param delimiter Delimitador que será utilizado nos _templates_.
- * @param options Opções customizadas de renderização e conversão dos componentes.
  */
 export class Component {
   private file: string;
@@ -20,58 +17,49 @@ export class Component {
   private className: string;
   private title: string;
 
-  constructor(srcDir: string, file: string, delimiter = ',', options: Options) {
+  constructor(file: string, delimiter = ',') {
     this.file = file;
     this.delimiter = delimiter;
 
     // Ajusta o caminho do componente conforme parâmetro "flatDirs".
     // Exemplo:
-    //  true  - zoo/animals/zebra/
-    //  false - zebra/
-    if (options.flatDirs) {
-      this.path = path.dirname(path.relative(srcDir, file)).split(path.sep).pop();
-    } else {
-      this.path = path.dirname(path.relative(srcDir, file)).replace(/\\/g, '/');
+    //  true  - zoo/zebra
+    //  false - zoo/animals/zebra
+    let dirname = path.dirname(path.relative(globals.args.srcPath, file));
+
+    // Valida se a pasta do componente inicia com um número e o remove. O
+    // número no ínicio do nome da pasta serve para indicar a ordem de criação
+    // dos componentes.
+    if (dirname.match(/^\d/)) {
+      const split = dirname.split('-');
+      split.shift();
+      dirname = split.join('-');
     }
 
-    this.name = path.basename(path.join(srcDir, this.path)).toLowerCase();
-    this.className = Transform.pascalCase(this.name);
-  }
+    if (globals.args.options.flatDirs) {
+      this.path = dirname.split(path.sep).pop();
+    } else {
+      this.path = dirname.replace(/\\/g, '/');
+    }
 
-  public setfile(file: string) {
-    this.file = file;
+    this.name = path.basename(path.join(globals.args.srcPath, this.path)).toLowerCase();
+    this.className = Transform.pascalCase(this.name);
   }
 
   public getFile(): string {
     return this.file;
   }
 
-  public setDelimiter(delimiter: string) {
-    this.delimiter = delimiter;
-  }
-
   public getDelimiter(): string {
     return this.delimiter;
-  }
-
-  public setPath(path: string) {
-    this.path = path;
   }
 
   public getPath(): string {
     return this.path;
   }
 
-  public setName(name: string) {
-    this.name = name;
-  }
-
   public getName(): string {
     return this.name;
-  }
-
-  public setClassName(className: string) {
-    this.className = className;
   }
 
   public getClassName(): string {
