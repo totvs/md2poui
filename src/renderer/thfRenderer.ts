@@ -57,6 +57,11 @@ export class ThfRenderer extends Renderer {
         .filter((m, i, l) => l.indexOf(m) === i) // Remove arquivos duplicados.
         .filter((m) => m.indexOf('http') < 0) // Somente arquivos "internos".
         .forEach((match) => (html = html.replace(new RegExp(match, 'g'), `${this.options.resourcePathName}/${this.addFile(match)}`)));
+      
+      // Como o marked cria cada linha em um elemento "p" e é semânticamente
+      // incorreto criar um elemento "div" dentro de um elemento "p", foi
+      // criado um elemento "span" para agrupar as imagens.
+      if (matches.length > 0) html = `<span style="display: flex; overflow: auto; text-align: center;">${html}</span>`;
     }
 
     return html;
@@ -90,8 +95,11 @@ export class ThfRenderer extends Renderer {
       file = this.addFile(href);
       file = `${this.options.resourcePathName}/${file}`;
     }
-
-    return `<img src="${file}" alt="${text}" />`;
+    
+    // Como o marked cria cada linha em um elemento "p" e é semânticamente
+    // incorreto criar um elemento "div" dentro de um elemento "p", foi criado
+    // um elemento "span" para agrupar as imagens.
+    return `<span style="display: flex; overflow: auto; text-align: center;"><img src="${file}" alt="${text}" /></span>`;
   }
 
   /**

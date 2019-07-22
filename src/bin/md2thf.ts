@@ -58,7 +58,7 @@ const argv = yargs
 
 const options: Options = {};
 options.portinariUi = argv.portinariUi;
-options.exclusions = (argv.exclusions || []) as string[];
+options.exclusions = argv.exclusions as string[];
 options.highlightClassName = argv.highlightClassName;
 options.flatDirs = argv.flatDirs;
 options.createHelpers = argv.createHelpers;

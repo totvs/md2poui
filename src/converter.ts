@@ -35,7 +35,7 @@ export class Converter {
    */
   private createComponentFiles(component: Component) {
     // Deve ser criado um ThfRenderer a cada componente gerado.
-    globals.args.options.renderer = new ThfRenderer(globals.args.options);
+    globals.args.options.renderer = new ThfRenderer();
 
     const dir = this.createComponentDirectory(component.getPath());
 

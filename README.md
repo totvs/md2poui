@@ -29,6 +29,14 @@ md2thf C:/pathFromMdFiles C:/pathToAngularFiles
 
 ## Release Notes
 
+### 1.2.4
+
+- A partir desta versão as imagens são criadas dentro de um elemento `div` com
+  `overflow=auto` para que a mesma não ultrapasse a área horizontal da página.
+- **Correção** nas configurações padrões.
+- **Correção** na geração de componentes onde a pasta contém números que
+  representam sua ordem de criação.
+
 ### 1.2.3
 
 - Adicionado suporte ao **PortinariUI**!
@@ -244,9 +252,7 @@ Valor padrão: `assets`.
 
 > Esta pasta deve ser incluída como `asset` da aplicação `Angular`.
 
-> Geralmente estes arquivos são imagens referenciadas pela marcação `markdown` ou `HTML`, como nos exemplos abaixo:<br>
-> `![Minha Imagem](imagens/minhaImagem.png)` ou<br>
-> `<img alt="Minha Imagem" src="imagens/minhaImagem.png" />`
+> Geralmente estes arquivos são imagens referenciadas pela marcação `markdown` ou `HTML`, como nos exemplos abaixo:<br> > `![Minha Imagem](imagens/minhaImagem.png)` ou<br> > `<img alt="Minha Imagem" src="imagens/minhaImagem.png" />`
 
 ### `options.resourcePathName`
 

@@ -1,4 +1,5 @@
 import { shim as flatMapShim } from 'array.prototype.flatmap';
+import defaults from 'defaults';
 import * as path from 'path';
 
 import { Converter } from './converter';
@@ -32,7 +33,7 @@ export = (srcPath: string, destDir: string, options?: Options) => {
  * @returns Configurações de conversão ajustadas.
  */
 function adjustOptions(srcPath: string, options: Options): Options {
-  options = Object.assign({}, defaultOptions, options);
+  options = defaults(options, defaultOptions);
   options.exclusions = options.exclusions.map((exclusion) => path.resolve(srcPath, exclusion));
   return options;
 }

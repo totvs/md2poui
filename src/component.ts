@@ -30,10 +30,9 @@ export class Component {
     // Valida se a pasta do componente inicia com um número e o remove. O
     // número no ínicio do nome da pasta serve para indicar a ordem de criação
     // dos componentes.
-    if (dirname.match(/^\d/)) {
-      const split = dirname.split('-');
-      split.shift();
-      dirname = split.join('-');
+    if (dirname.match(/\d.-/)) {
+      const split = dirname.split(path.sep).map((s) => s.replace(/^\d.-/, ''));
+      dirname = split.join(path.sep);
     }
 
     if (globals.args.options.flatDirs) {
