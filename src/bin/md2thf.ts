@@ -64,6 +64,7 @@ options.flatDirs = argv.flatDirs;
 options.createHelpers = argv.createHelpers;
 options.moduleName = argv.moduleName;
 options.copyExternalFiles = argv.copyExternalFiles;
+options.parentRoutePath = argv.parentRoutePath;
 options.resourceFolderName = argv.resourceFolderName;
 options.resourcePathName = argv.resourcePathName;
 
