@@ -29,6 +29,10 @@ md2thf C:/pathFromMdFiles C:/pathToAngularFiles
 
 ## Release Notes
 
+### 1.2.5
+
+- Corrigido parâmetro `parentRoutePath` na versão CLI (por [@laraujo0901](https://github.com/laraujo0901))
+
 ### 1.2.4
 
 - A partir desta versão as imagens são criadas dentro de um elemento `div` com
@@ -64,7 +68,7 @@ md2thf C:/pathFromMdFiles C:/pathToAngularFiles
 ### 1.1.0
 
 - Adicionado suporte a ícones do padrão do GitHub.
-  <br/>Exemplo: `:warning:` será :warning:.
+  <br/>Exemplo: `:warning:` será :warning: (por [@marcospds](https://github.com/marcospds)).
 
 - Adicionadas novas configurações: `options.createHelpers` e `options.copyExternalFiles`.
   > Mais informações disponíveis no item [`options`](#options).
