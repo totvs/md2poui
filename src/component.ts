@@ -18,30 +18,32 @@ export class Component {
   private title: string;
 
   constructor(file: string, delimiter = ',') {
+    const srcPath = globals.args.getSrcPath();
+
     this.file = file;
     this.delimiter = delimiter;
 
-    // Ajusta o caminho do componente conforme parâmetro "flatDirs".
-    // Exemplo:
-    //  true  - zoo/zebra
-    //  false - zoo/animals/zebra
-    let dirname = path.dirname(path.relative(globals.args.srcPath, file));
+    let dirname = path.dirname(path.relative(srcPath, file));
 
     // Valida se a pasta do componente inicia com um número e o remove. O
     // número no ínicio do nome da pasta serve para indicar a ordem de criação
     // dos componentes.
     if (dirname.match(/\d.-/)) {
-      const split = dirname.split(path.sep).map((s) => s.replace(/^\d.-/, ''));
+      const split = dirname.split(path.sep).map(s => s.replace(/^\d.-/, ''));
       dirname = split.join(path.sep);
     }
 
-    if (globals.args.options.flatDirs) {
+    // Ajusta o caminho do componente conforme parâmetro "flatDirs".
+    // Exemplo:
+    //  true  - zoo/zebra
+    //  false - zoo/animals/zebra
+    if (globals.args.getOptions().flatDirs) {
       this.path = dirname.split(path.sep).pop();
     } else {
       this.path = dirname.replace(/\\/g, '/');
     }
 
-    this.name = path.basename(path.join(globals.args.srcPath, this.path)).toLowerCase();
+    this.name = path.basename(path.join(srcPath, this.path)).toLowerCase();
     this.className = Transform.pascalCase(this.name);
   }
 

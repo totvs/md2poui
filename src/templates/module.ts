@@ -1,11 +1,13 @@
-import { globals } from '../helpers';
-
-export const module = () => {
-  return `import { NgModule } from '@angular/core';
-${getModuleImport()};
+export const module = () => `
+import { NgModule } from '@angular/core';
+import { PoModule } from '@portinari/portinari-ui';
 
 import { {{moduleClassName}}RoutingModule } from './{{moduleName}}-routing.module';
 import { {{moduleClassName}}Service } from './{{moduleName}}.service';
+
+{{#home}}
+import { {{moduleClassName}}HomeComponent } from './{{moduleName}}-home.component';
+{{/home}}
 
 {{#components}}
 import { {{className}}Component } from './{{&path}}/{{name}}.component';
@@ -13,28 +15,15 @@ import { {{className}}Component } from './{{&path}}/{{name}}.component';
 
 @NgModule({
   declarations: [
+    {{#home}}
+    {{moduleClassName}}HomeComponent,
+    {{/home}}
     {{#components}}
     {{className}}Component{{delimiter}}
     {{/components}}
   ],
-  imports: [${getModuleClass()}, {{moduleClassName}}RoutingModule],
+  imports: [PoModule, {{moduleClassName}}RoutingModule],
   providers: [{{moduleClassName}}Service]
 })
-export class {{moduleClassName}}Module {}`;
-};
-
-function getModuleImport(): string {
-  let module: string;
-
-  if (globals.args.options.portinariUi) {
-    module = `import { PoModule } from '@portinari/portinari-ui'`;
-  } else {
-    module = `import { ThfModule } from '@totvs/thf-ui'`;
-  }
-
-  return module;
-}
-
-function getModuleClass(): string {
-  return globals.args.options.portinariUi ? 'PoModule' : 'ThfModule';
-}
+export class {{moduleClassName}}Module {}
+`;

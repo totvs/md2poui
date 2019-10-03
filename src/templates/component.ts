@@ -1,5 +1,5 @@
-export const component = () => {
-  return `import { Component, OnInit } from '@angular/core';
+export const component = () => `
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-{{component.name}}',
@@ -9,5 +9,5 @@ export const component = () => {
 export class {{component.className}}Component implements OnInit {
   constructor() {}
   ngOnInit() {}
-}`;
-};
+}
+`;

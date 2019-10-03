@@ -52,16 +52,12 @@ export class ThfRenderer extends Renderer {
     // conversão destes arquivos.
     if (this.options.copyExternalFiles) {
       const matches = /src=\"([^']*?)\"/g.exec(html);
-      matches
-        .slice(1)
+      matches.slice(1)
         .filter((m, i, l) => l.indexOf(m) === i) // Remove arquivos duplicados.
-        .filter((m) => m.indexOf('http') < 0) // Somente arquivos "internos".
-        .forEach((match) => (html = html.replace(new RegExp(match, 'g'), `${this.options.resourcePathName}/${this.addFile(match)}`)));
-      
-      // Como o marked cria cada linha em um elemento "p" e é semânticamente
-      // incorreto criar um elemento "div" dentro de um elemento "p", foi
-      // criado um elemento "span" para agrupar as imagens.
-      if (matches.length > 0) html = `<span style="display: flex; overflow: auto; text-align: center;">${html}</span>`;
+        .filter(m => m.indexOf('http') < 0) // Somente arquivos "internos".
+        .forEach(m => (html = html.replace(new RegExp(m, 'g'), `${this.options.resourcePathName}/${this.addFile(m)}`)));
+
+      if (matches.length > 0) html = this.adjustImageHtml(html);
     }
 
     return html;
@@ -74,9 +70,9 @@ export class ThfRenderer extends Renderer {
     let element: string;
 
     if (ordered) {
-      element = `<ol class="${this.getTextClassName()}" start="${start}">${body}</ol>`;
+      element = `<ol class="po-font-text" start="${start}">${body}</ol>`;
     } else {
-      element = `<ul class="${this.getTextClassName()}">${body}</ul>`;
+      element = `<ul class="po-font-text">${body}</ul>`;
     }
 
     return element;
@@ -95,11 +91,8 @@ export class ThfRenderer extends Renderer {
       file = this.addFile(href);
       file = `${this.options.resourcePathName}/${file}`;
     }
-    
-    // Como o marked cria cada linha em um elemento "p" e é semânticamente
-    // incorreto criar um elemento "div" dentro de um elemento "p", foi criado
-    // um elemento "span" para agrupar as imagens.
-    return `<span style="display: flex; overflow: auto; text-align: center;"><img src="${file}" alt="${text}" /></span>`;
+
+    return this.adjustImageHtml(`<img src="${file}" alt="${text}" />`);
   }
 
   /**
@@ -122,7 +115,7 @@ export class ThfRenderer extends Renderer {
    * @override
    */
   public paragraph(text: string): string {
-    return `<p class="${this.getTextClassName()}">${text}</p>`;
+    return `<p class="po-font-text">${text}</p>`;
   }
 
   public getTitle(): string {
@@ -165,8 +158,11 @@ export class ThfRenderer extends Renderer {
       .toLowerCase();
   }
 
-  private getTextClassName(): string {
-    return this.options.portinariUi ? 'po-font-text' : 'thf-font-text';
+  private adjustImageHtml(html: string): string {
+    // Como o marked cria cada linha em um elemento "p" e é semânticamente
+    // incorreto criar um elemento "div" dentro de um elemento "p", foi criado
+    // um elemento "span" para agrupar as imagens.
+    return `<span style="display: flex; overflow: auto; text-align: center; justify-content: center;">${html}</span>`;
   }
 }
 
