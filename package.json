@@ -1,6 +1,6 @@
 {
   "name": "md2thf",
-  "version": "1.2.5",
+  "version": "2.0.0",
   "description": "Conversor de arquivos markdown para páginas Angular que utilizam a biblioteca TOTVS HTML Framework (THF)",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,8 @@
     "totvs",
     "markdown",
     "angular",
-    "thf"
+    "thf",
+    "portinariui"
   ],
   "author": "Rubens Dos Santos Filho",
   "license": "MIT",
@@ -30,25 +31,25 @@
   "dependencies": {
     "array.prototype.flatmap": "^1.2.1",
     "defaults": "^1.0.3",
-    "marked": "^0.6.2",
-    "mustache": "^3.0.1",
+    "marked": "^0.7.0",
+    "mustache": "^3.1.0",
     "node-emoji": "^1.10.0",
     "sanitize-html": "^1.20.1",
-    "typescript": "^3.4.5",
-    "uuid": "^3.3.2",
-    "yargs": "^13.2.4"
+    "typescript": "^3.6.3",
+    "uuid": "^3.3.3",
+    "yargs": "^14.0.0"
   },
   "devDependencies": {
     "@types/array.prototype.flatmap": "^1.2.0",
     "@types/defaults": "^1.0.2",
     "@types/marked": "^0.6.5",
     "@types/mustache": "^0.8.32",
-    "@types/node": "^12.0.2",
+    "@types/node": "^12.7.8",
     "@types/node-emoji": "^1.8.1",
-    "@types/sanitize-html": "^1.20.0",
-    "@types/uuid": "^3.4.4",
-    "@types/yargs": "^13.0.0",
-    "del": "^4.1.1",
+    "@types/sanitize-html": "^1.20.2",
+    "@types/uuid": "^3.4.5",
+    "@types/yargs": "^13.0.3",
+    "del": "^5.1.0",
     "gulp": "^4.0.2",
     "gulp-uglify": "^3.0.2"
   }

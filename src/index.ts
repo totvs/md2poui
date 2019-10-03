@@ -1,5 +1,6 @@
 import { shim as flatMapShim } from 'array.prototype.flatmap';
 import defaults from 'defaults';
+import * as mustache from 'mustache';
 import * as path from 'path';
 
 import { Converter } from './converter';
@@ -34,6 +35,11 @@ export = (srcPath: string, destDir: string, options?: Options) => {
  */
 function adjustOptions(srcPath: string, options: Options): Options {
   options = defaults(options, defaultOptions);
-  options.exclusions = options.exclusions.map((exclusion) => path.resolve(srcPath, exclusion));
+  options.exclusions = options.exclusions.map(exclusion => path.resolve(srcPath, exclusion));
+
+  // Ajusta nomes gerados dinâmicamente.
+  const adjust = JSON.stringify(options);
+  options = JSON.parse(mustache.render(adjust, options));
+  
   return options;
 }

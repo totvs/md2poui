@@ -1,6 +1,6 @@
 # md2thf
 
-Conversor de arquivos `markdown` para componentes `Angular` utilizando recursos visuais das bibliotecas [`PortinariUI ou TOTVS HTML Framework (THF)`][thf].
+Conversor de arquivos `markdown` para componentes `Angular` utilizando recursos visuais das bibliotecas [`Portinari UI`][portinariui].
 
 ## Instalação
 
@@ -29,16 +29,21 @@ md2thf C:/pathFromMdFiles C:/pathToAngularFiles
 
 ## Release Notes
 
+### 2.0.0 **Nova Versão!**
+
+- Removido suporte ao `THF`.
+- Adicionada nova configuração: `options.home`.
+  > Mais informações disponíveis no item [`options`](#options).
+
 ### 1.2.5
 
-- Corrigido parâmetro `parentRoutePath` na versão CLI (por [@laraujo0901](https://github.com/laraujo0901))
+- Corrigido parâmetro `parentRoutePath` na versão CLI - por [@laraujo0901](https://github.com/laraujo0901).
 
 ### 1.2.4
 
-- A partir desta versão as imagens são criadas dentro de um elemento `div` com
-  `overflow=auto` para que a mesma não ultrapasse a área horizontal da página.
-- **Correção** nas configurações padrões.
-- **Correção** na geração de componentes onde a pasta contém números que
+- Melhoria na conversão das imagens para que as mesmas não gerem barra de rolagem horizontal para a página.
+- Corrigidas configurações padrões.
+- Corrigida geração de componentes onde a pasta contém números que
   representam sua ordem de criação.
 
 ### 1.2.3
@@ -63,26 +68,24 @@ md2thf C:/pathFromMdFiles C:/pathToAngularFiles
 
 ### 1.1.1 e 1.1.2
 
-- **Correção** nas dependências utilizadas pelo projeto.
+- Corregidas dependências utilizadas pelo projeto.
 
 ### 1.1.0
 
 - Adicionado suporte a ícones do padrão do GitHub.
-  <br/>Exemplo: `:warning:` será :warning: (por [@marcospds](https://github.com/marcospds)).
-
+  <br/>Exemplo: `:warning:` será :warning: - por [@marcospds](https://github.com/marcospds).
 - Adicionadas novas configurações: `options.createHelpers` e `options.copyExternalFiles`.
   > Mais informações disponíveis no item [`options`](#options).
 
 ### 1.0.2
 
-- **Correção** na verificação das configurações padrões quando não era informado nunhum `exclusions`.
+- Corrigida verificação das configurações padrões quando não era informado `exclusions`.
 - Adicionado suporte a links internos na geração dos componentes.
-- Adicionado suporte à âncoras para títulos de até nível três.
+- Adicionado suporte à âncoras para títulos de até três níveis.
 
 ### 1.0.1
 
 - Primeira versão!
-- Converte os arquivos markdown para componentes `Angular` utilizando biliotecas visuais do **PortinariUI** ou **TOTVS HTML Framework**.
 
 ## Parâmetros
 
@@ -92,7 +95,7 @@ function md2thf(srcPath: string, destDir: string, options?: Options): void {}
 
 ### `srcPath`
 
-Caminho de origem dos arquivos `markdown` que serão convertidos. São considerados todos os arquivos com extensão `.md` encontrados na pasta raiz e nas subpastas do diretório informado.
+Caminho de origem dos arquivos `markdown` que serão convertidos. São considerados todos os arquivos com extensão `.md` encontrados na pasta raiz e nas subpastas do caminho informado.
 
 Exemplo: `C:/zoologico`.
 
@@ -110,25 +113,19 @@ Opções de configurações e definições customizadas de conversão dos arquiv
 
 ```typescript
 {
-  portinariUi: boolean = false,
   exclusions: string[] = [],
-  highlightClassName: 'highlight',
+  highlightClassName: string = 'highlight',
   flatDirs: boolean = false,
   recursive: boolean = true,
   createHelpers: boolean = true,
+  home: boolean = true,
   moduleName: string = 'docs',
-  parentRoutePath: string = 'docs',
+  parentRoutePath: string = '{{moduleName}}',
   copyExternalFiles: boolean = true,
   resourceFolderName: string = 'assets',
-  resourcePathName: string = 'src/app/docs/assets'
+  resourcePathName: string = 'src/app/{{moduleName}}/{{resourceFolderName}}'
 }
 ```
-
-### `options.portinariUi`
-
-Se verdadeiro, irá criar os componentes utilizando a biblioteca visual **PortinariUI**, caso contrário será utilizado o **THF**.
-
-Valor padrão: `false`.
 
 ### `options.exclusions`
 
@@ -139,7 +136,7 @@ Exemplo: `['C:/zoologico/onca/README.md', 'chimpanze/README.md']`.
 
 ### `options.highlightClassName`
 
-Nome da classe `CSS` que será utilizada nos trechos de códigos de exemplo.
+Nome da classe `CSS` que será utilizada nos elementos de códigos de exemplo.
 
 > Independente desta configuração, a classe contendo o nome da linguagem sempre é inserida.
 
@@ -215,19 +212,25 @@ Se verdadeiro, irá criar os arquivos auxiliares de módulo, rotas e serviço.
 
 Valor padrão: `true`.
 
+### `options.home`
+
+Se verdadeiro, irá criar uma página inicial já com menu para os componentes criados.
+
+Valor padrão: `true`.
+
 ### `options.moduleName`
 
 Nome do módulo `Angular` que será criado para agrupar os componentes gerados a partir da conversão dos arquivos `markdown`.
 
 Valor padrão: `docs`.
 
-> O nome do módulo deve ser informado em `CamelCase`.
+> O nome do módulo deve ser informado em `camelCase`.
 
 ### `options.parentRoutePath`
 
 Caminho da rota pai que será utilizado para as rotas dos componentes.
 
-Valor padrão: `docs`.
+Valor padrão: `{{options.moduleName}}`.
 
 Exemplo:
 
@@ -235,7 +238,7 @@ Exemplo:
 
 ```javascript
 {
-  label: "leao",
+  label: "Leão",
   link: "zoo/animais/leao"
 }
 ```
@@ -262,7 +265,7 @@ Valor padrão: `assets`.
 
 Caminho que será utilizado para referenciar os arquivos externos copiados durante a conversão dos arquivos `markdown`.
 
-Padrão: `app/docs/assets`.
+Padrão: `src/app/{{options.moduleName}}/{{options.resourceFolderName}}`.
 
 > Este caminho deve ser acessível pela aplicação `Angular`.
 
@@ -270,13 +273,15 @@ Padrão: `app/docs/assets`.
 
 Além da conversão e criação dos componentes `Angular` são criados mais três arquivos auxiliares: módulo, rotas e serviço.
 
-O arquivo de módulo agrega todos os componentes criados e o roteamento destes componentes - com o uso do arquivo de roteamento. Já o arquivo de serviço possui facilitadores para retornar a lista das rotas dos componentes no formato esperado pelo menu do [`PortinariUI ou THF`][thf-menu].
+O arquivo de módulo agrega todos os componentes criados e o roteamento destes componentes - com o uso do arquivo de roteamento.
+
+Já o arquivo de serviço possui facilitadores para retornar a lista das rotas dos componentes no formato esperado pelo menu do [`Portinari UI`][po-menu].
 
 _Module_
 
 ```typescript
 import { NgModule } from '@angular/core';
-import { ThfModule } from '@totvs/thf-ui';
+import { PoModule } from '@portinari/portinari-ui';
 
 import { WikiRoutingModule } from './wiki-routing.module';
 import { WikiService } from './wiki.service';
@@ -285,7 +290,7 @@ import { SampleComponent } from './sample/sample.component';
 
 @NgModule({
   declarations: [SampleComponent],
-  imports: [ThfModule, WikiRoutingModule],
+  imports: [PoModule, WikiRoutingModule],
   providers: [WikiService]
 })
 export class WikiModule {}
@@ -317,7 +322,7 @@ _Service_
 
 ```typescript
 import { Injectable } from '@angular/core';
-import { ThfMenuItem } from '@totvs/thf-ui';
+import { PoMenuItem } from '@portinari/portinari-ui';
 
 @Injectable({
   providedIn: 'root'
@@ -325,7 +330,7 @@ import { ThfMenuItem } from '@totvs/thf-ui';
 export class WikiService {
   constructor() {}
 
-  public getWikiMenuItems(): ThfMenuItem[] {
+  public getWikiMenuItems(): PoMenuItem[] {
     return [
       {
         label: 'Sample Component',
@@ -338,7 +343,7 @@ export class WikiService {
 
 ## Visualização dos arquivos externos
 
-Todos os arquivos externos referenciados nos arquivos `markdown` são copiados para a pasta de recursos (conforme parâmetro `options.resourceFolderName`) com outro nome gerado dinâmicamente.
+Os arquivos externos referenciados nos arquivos `markdown` são copiados para a pasta de recursos (conforme parâmetros `options.copyExternalFiles` e `options.resourceFolderName`) com outro nome gerado dinâmicamente.
 
 Para que seja possível a visualização dos arquivos desta pasta pela aplicação `Angular` é necessário adicionar a pasta de recursos como `asset` alterando o arquivo `angular.json` da aplicação:
 
@@ -356,5 +361,5 @@ Para que seja possível a visualização dos arquivos desta pasta pela aplicaç�
 
 Toda a área de documentação do portal [**TOTVS Java Framework**](https://tjf.totvs.com.br) foi desenvolvida utilizando o `md2thf`.
 
-[thf]: https://thf.totvs.com.br
-[thf-menu]: https://thf.totvs.com.br/documentation/thf-menu
+[portinariui]: https://portinari.io/
+[po-menu]: https://portinari.io/documentation/po-menu

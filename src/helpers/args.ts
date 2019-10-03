@@ -8,17 +8,17 @@ export class Args {
   /**
    * Caminho de busca dos arquivos `markdown`.
    */
-  srcPath: string;
+  private srcPath: string;
 
   /**
    * Diretório de destino onde serão criados os componentes `Angular`.
    */
-  destDir: string;
+  private destDir: string;
 
   /**
    * Configurações customizadas de conversão.
    */
-  options: Options;
+  private options: Options;
 
   constructor(srcPath: string, destDir: string, options: Options) {
     this.srcPath = srcPath;

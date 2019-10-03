@@ -13,14 +13,20 @@ import * as templates from './templates';
  * `markdown` encontrados no caminho de origem.
  */
 export class Converter {
+  private options = globals.args.getOptions();
+
   /**
    * Executa a conversão dos arquivos `markdown`.
    */
   public execute() {
     const components = this.getMarkdownFiles().map((f, i, l) => new Component(f, i === l.length - 1 ? '' : ','));
-    components.forEach((component) => this.createComponentFiles(component));
+    components.forEach(component => this.createComponentFiles(component));
 
-    if (globals.args.options.createHelpers) {
+    if (this.options.home) {
+      this.createHomeFile();
+    }
+
+    if (this.options.createHelpers) {
       this.createModuleFile(components);
       this.createRouterFile(components);
       this.createServicFile(components);
@@ -35,7 +41,7 @@ export class Converter {
    */
   private createComponentFiles(component: Component) {
     // Deve ser criado um ThfRenderer a cada componente gerado.
-    globals.args.options.renderer = new ThfRenderer();
+    this.options.renderer = new ThfRenderer();
 
     const dir = this.createComponentDirectory(component.getPath());
 
@@ -46,11 +52,11 @@ export class Converter {
     fs.writeFileSync(path.join(dir, `${component.getName()}.component.html`), html, 'utf-8');
 
     // Efetua a cópia dos arquivos externos.
-    if (globals.args.options.copyExternalFiles) {
+    if (this.options.copyExternalFiles) {
       this.copyFiles(
         path.dirname(component.getFile()),
-        path.join(globals.args.destDir, globals.args.options.resourceFolderName),
-        globals.args.options.renderer.getFiles()
+        path.join(globals.args.getDestDir(), this.options.resourceFolderName),
+        this.options.renderer.getFiles()
       );
     }
   }
@@ -62,7 +68,7 @@ export class Converter {
    * @returns Caminho completo do diretório de destino criado.
    */
   private createComponentDirectory(destPath: string): string {
-    const dirPath = path.join(globals.args.destDir, destPath);
+    const dirPath = path.join(globals.args.getDestDir(), destPath);
     if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath, { recursive: true });
     return dirPath;
   }
@@ -87,10 +93,26 @@ export class Converter {
    */
   private renderComponentView(component: Component) {
     const markdown = TransformIcon.convert(fs.readFileSync(component.getFile(), 'utf-8'));
-    const content = marked(markdown, globals.args.options);
+    const content = marked(markdown, this.options);
 
-    component.setTitle(globals.args.options.renderer.getTitle());
+    component.setTitle(this.options.renderer.getTitle());
     return mustache.render(templates.componentView(), { title: component.getTitle(), content });
+  }
+
+  /**
+   * Cria a página inicial com o menu dos componentes criados.
+   */
+  private createHomeFile() {
+    const moduleName = this.options.moduleName;
+    const moduleClassName = Transform.pascalCase(moduleName);
+
+    const content = mustache.render(templates.home(), { moduleClassName, moduleName });
+    const file = path.join(globals.args.getDestDir(), `${this.options.moduleName}-home.component.ts`);
+    fs.writeFileSync(file, content, 'utf-8');
+
+    const viewContent = mustache.render(templates.homeView(), { moduleClassName, moduleName });
+    const viewFile = path.join(globals.args.getDestDir(), `${this.options.moduleName}-home.component.html`);
+    fs.writeFileSync(viewFile, viewContent, 'utf-8');
   }
 
   /**
@@ -100,11 +122,14 @@ export class Converter {
    * @param components Lista dos objetos com as informações dos componentes.
    */
   private createModuleFile(components: Component[]) {
-    const moduleName = globals.args.options.moduleName;
+    const moduleName = this.options.moduleName;
     const moduleClassName = Transform.pascalCase(moduleName);
-    const moduleContent = mustache.render(templates.module(), { components, moduleName, moduleClassName });
-    const moduleFile = path.join(globals.args.destDir, `${globals.args.options.moduleName}.module.ts`);
-    fs.writeFileSync(moduleFile, moduleContent, 'utf-8');
+
+    const home = this.options.home;
+    const content = mustache.render(templates.module(), { home, components, moduleName, moduleClassName });
+    const file = path.join(globals.args.getDestDir(), `${this.options.moduleName}.module.ts`);
+
+    fs.writeFileSync(file, content, 'utf-8');
   }
 
   /**
@@ -114,11 +139,14 @@ export class Converter {
    * @param components Lista dos objetos com as informações dos componentes.
    */
   private createRouterFile(components: Component[]) {
-    const moduleName = globals.args.options.moduleName;
+    const moduleName = this.options.moduleName;
     const moduleClassName = Transform.pascalCase(moduleName);
-    const routerCont = mustache.render(templates.routing(), { components, moduleName, moduleClassName });
-    const routerFile = path.join(globals.args.destDir, `${globals.args.options.moduleName}-routing.module.ts`);
-    fs.writeFileSync(routerFile, routerCont, 'utf-8');
+
+    const home = this.options.home;
+    const content = mustache.render(templates.routing(), { home, components, moduleName, moduleClassName });
+    const file = path.join(globals.args.getDestDir(), `${this.options.moduleName}-routing.module.ts`);
+
+    fs.writeFileSync(file, content, 'utf-8');
   }
 
   /**
@@ -132,10 +160,11 @@ export class Converter {
     const menu = this.loadMenuItems(components);
     const menuItems = JSON.stringify(menu, null, 2).replace(/\"([^(\")"]+)\":/g, '$1:');
 
-    const moduleName = globals.args.options.moduleName;
+    const moduleName = this.options.moduleName;
     const moduleClassName = Transform.pascalCase(moduleName);
+
     const serviceCont = mustache.render(templates.service(), { moduleClassName, menuItems });
-    const serviceFile = path.join(globals.args.destDir, `${globals.args.options.moduleName}.service.ts`);
+    const serviceFile = path.join(globals.args.getDestDir(), `${this.options.moduleName}.service.ts`);
     fs.writeFileSync(serviceFile, serviceCont, 'utf-8');
   }
 
@@ -157,15 +186,15 @@ export class Converter {
       menuItem.file = component.getFile();
       menuItem.subItems = [];
 
-      if (globals.args.options.parentRoutePath && globals.args.options.parentRoutePath.length > 0) {
-        menuItem.link = `${globals.args.options.parentRoutePath}/${component.getName()}`;
+      if (this.options.parentRoutePath && this.options.parentRoutePath.length > 0) {
+        menuItem.link = `${this.options.parentRoutePath}/${component.getName()}`;
       } else {
         menuItem.link = component.getName();
       }
 
       // Verifica se o componente atual é filho direto de algum componente
       // anterior.
-      const menuParent = globals.args.options.flatDirs ? null : this.getMenuParent(menuItems, components[i]);
+      const menuParent = this.options.flatDirs ? null : this.getMenuParent(menuItems, components[i]);
 
       if (menuParent) {
         menuParent.push(menuItem);
@@ -186,7 +215,7 @@ export class Converter {
    * @param menuItems Estrutura dos itens de menu.
    * @param components Lista dos objetos com as informações dos componentes.
    *
-   * @returns Estrutura do itens de menu pai do componente informado.
+   * @returns Estrutura do item de menu pai do componente informado.
    */
   private getMenuParent(menuItems: MenuItem[], component: Component): MenuItem[] {
     let menuParent: MenuItem[] = null;
@@ -240,7 +269,7 @@ export class Converter {
    */
   private copyFiles(srcDir: string, destDir: string, files: MarkdownFile[]) {
     if (!fs.existsSync(destDir)) fs.mkdirSync(destDir, { recursive: true });
-    files.forEach((file) => fs.copyFileSync(path.join(srcDir, file.from), path.join(destDir, file.to)));
+    files.forEach(file => fs.copyFileSync(path.join(srcDir, file.from), path.join(destDir, file.to)));
   }
 
   /**
@@ -250,8 +279,8 @@ export class Converter {
    * @param searchPath Caminho de busca de arquivos `markdown`.
    * @returns Lista dos arquivos `markdown` encontrados.
    */
-  private getMarkdownFiles(searchPath = globals.args.srcPath): string[] {
-    const recursive = globals.args.options.recursive;
+  private getMarkdownFiles(searchPath = globals.args.getSrcPath()): string[] {
+    const recursive = this.options.recursive;
     let files: string[];
 
     if (fs.statSync(searchPath).isFile()) {
@@ -260,10 +289,10 @@ export class Converter {
       files = fs
         .readdirSync(searchPath)
         .sort((a, b) => (path.extname(a) === '.md' ? -1 : a < b ? -1 : 1)) // Arquivos `markdown` primeiro.
-        .map((file) => path.join(searchPath, file))
-        .filter((file) => !globals.args.options.exclusions.some((exclusion) => path.dirname(file).startsWith(exclusion)))
-        .flatMap((file) => (recursive && fs.statSync(file).isDirectory() ? this.getMarkdownFiles(file) : file))
-        .filter((file) => globals.args.options.exclusions.indexOf(file) === -1 && path.extname(file) === '.md');
+        .map(file => path.join(searchPath, file))
+        .filter(file => !this.options.exclusions.some(exclusion => path.dirname(file).startsWith(exclusion)))
+        .flatMap(file => (recursive && fs.statSync(file).isDirectory() ? this.getMarkdownFiles(file) : file))
+        .filter(file => this.options.exclusions.indexOf(file) === -1 && path.extname(file) === '.md');
     }
 
     return files;
