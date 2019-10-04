@@ -24,14 +24,7 @@ export class Component {
     this.delimiter = delimiter;
 
     let dirname = path.dirname(path.relative(srcPath, file));
-
-    // Valida se a pasta do componente inicia com um número e o remove. O
-    // número no ínicio do nome da pasta serve para indicar a ordem de criação
-    // dos componentes.
-    if (dirname.match(/\d.-/)) {
-      const split = dirname.split(path.sep).map(s => s.replace(/^\d.-/, ''));
-      dirname = split.join(path.sep);
-    }
+    dirname = this.adjustDirname(dirname);
 
     // Ajusta o caminho do componente conforme parâmetro "flatDirs".
     // Exemplo:
@@ -44,6 +37,7 @@ export class Component {
     }
 
     this.name = path.basename(path.join(srcPath, this.path)).toLowerCase();
+    this.name = this.adjustDirname(this.name);
     this.className = Transform.pascalCase(this.name);
   }
 
@@ -73,5 +67,23 @@ export class Component {
 
   public getTitle(): string {
     return this.title;
+  }
+
+  /**
+   * Ajusta o diretório do componente - verifica se o mesmo inicia com um
+   * número e o remove.
+   * 
+   * O número no ínicio do nome da pasta serve para indicar a ordem de
+   * criação dos componentes.
+   *
+   * @param path Diretório do componente.
+   * @returns Diretório do componente ajustado.
+   */
+  private adjustDirname(dirname: string): string {
+    if (dirname.match(/\d.-/)) {
+      const split = dirname.split(path.sep).map(s => s.replace(/^\d.-/, ''));
+      dirname = split.join(path.sep);
+    }
+    return dirname;
   }
 }

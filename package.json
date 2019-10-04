@@ -1,6 +1,6 @@
 {
   "name": "md2thf",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "description": "Conversor de arquivos markdown para páginas Angular que utilizam a biblioteca TOTVS HTML Framework (THF)",
   "main": "index.js",
   "scripts": {

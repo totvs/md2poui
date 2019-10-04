@@ -12,8 +12,8 @@ import { {{moduleClassName}}Service } from './{{moduleName}}.service';
 export class {{moduleClassName}}HomeComponent implements OnInit {
   public menus: PoMenuItem[] = [];
 
-  constructor(private {{moduleName}}Service: {{moduleClassName}}Service) {
-    this.menus = this.{{moduleName}}Service.getMenuItems();
+  constructor(service: {{moduleClassName}}Service) {
+    this.menus = service.getMenuItems();
   }
 
   ngOnInit() {}

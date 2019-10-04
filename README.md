@@ -29,6 +29,15 @@ md2thf C:/pathFromMdFiles C:/pathToAngularFiles
 
 ## Release Notes
 
+### 2.0.2
+
+- Inclusão do campo de filtro no menu da página inicial.
+
+### 2.0.1
+
+- Corrigida geração da página inicial ao usar nome de módulo com mais de uma palavra.
+- Corrigida geração de componentes que possuem números no início do nome.
+
 ### 2.0.0 **Nova Versão!**
 
 - Removido suporte ao `THF`.
@@ -224,7 +233,7 @@ Nome do módulo `Angular` que será criado para agrupar os componentes gerados a
 
 Valor padrão: `docs`.
 
-> O nome do módulo deve ser informado em `camelCase`.
+> O nome do módulo deve ser informado em `kebab-case`.
 
 ### `options.parentRoutePath`
 
