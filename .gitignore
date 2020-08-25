@@ -1,4 +1,11 @@
-.vscode/
-dist/
+# Dependency directories
 node_modules/
-md2thf-*.tgz
+
+# Output of 'npm pack'
+*.tgz
+
+# Generate output
+dist
+
+# Result test files
+test/result/**/*.*
