@@ -18,7 +18,7 @@ export class Converter {
   private destDir: string;
   private options: Options;
 
-  constructor(srcPath: string, destDir: string, options: Options) {
+  constructor(srcPath?: string, destDir?: string, options?: Options) {
     this.srcPath = srcPath;
     this.destDir = destDir;
     this.options = options;
@@ -38,6 +38,21 @@ export class Converter {
       this.createRouterFile(components);
       this.createServiceFile(components);
     }
+  }
+
+  /**
+   * Executa a conversão do conteúdo `markdown` para `PO-UI`.
+   *
+   * @param markdown conteúdo `markdown`
+   * @returns conteúdo convertido para `PO-UI`
+   */
+  public convert(markdown: string): string {
+    markdown = Transform.textToIcon(markdown);
+
+    const renderer = new PoRenderer();
+    const content = marked(markdown, { renderer });
+
+    return mustache.render(templates.componentView(), { title: renderer.getTitle(), content });
   }
 
   /**
