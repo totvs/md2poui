@@ -1,10 +1,15 @@
 const gulp = require('gulp');
 const uglify = require('gulp-uglify');
 
+// App
 gulp.task('clean', () => require('del')('dist'));
-gulp.task('copy', () => gulp.src(['package.json', 'package-lock.json', 'README.md']).pipe(gulp.dest('dist')));
+gulp.task('copy', () => gulp.src(['package.json', 'README.md']).pipe(gulp.dest('dist')));
 
 gulp.task('uglify', () => gulp.src('dist/**/*.js').pipe(uglify()).pipe(gulp.dest('dist')));
 
-gulp.task('prebuild', gulp.series('clean', (done) => done()));
-gulp.task('postbuild', gulp.series('copy', 'uglify', (done) => done()));
+gulp.task('prebuild', gulp.series('clean'));
+gulp.task('postbuild', gulp.series('copy', 'uglify'));
+
+// Test
+gulp.task('cleanTest', () => require('del')('test/result'));
+gulp.task('pretest', gulp.series('cleanTest'));

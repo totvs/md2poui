@@ -1,5 +1,4 @@
-export const routing = () => `
-import { NgModule } from '@angular/core';
+export const routing = () => `import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 {{#home}}

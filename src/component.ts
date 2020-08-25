@@ -1,13 +1,11 @@
 import * as path from 'path';
 
-import { globals, Transform } from './helpers';
+import { Transform } from './helpers';
+import { Options } from './options';
 
 /**
  * Informações do componente que será criado a partir da conversão do arquivo
  * `markdown`.
- *
- * @param file Caminho completo do arquivo `markdown` que será convertido.
- * @param delimiter Delimitador que será utilizado nos _templates_.
  */
 export class Component {
   private file: string;
@@ -17,9 +15,7 @@ export class Component {
   private className: string;
   private title: string;
 
-  constructor(file: string, delimiter = ',') {
-    const srcPath = globals.args.getSrcPath();
-
+  constructor(srcPath: string, file: string, options: Options, delimiter = ',') {
     this.file = file;
     this.delimiter = delimiter;
 
@@ -30,7 +26,7 @@ export class Component {
     // Exemplo:
     //  true  - zoo/zebra
     //  false - zoo/animals/zebra
-    if (globals.args.getOptions().flatDirs) {
+    if (options.flatDirs) {
       this.path = dirname.split(path.sep).pop();
     } else {
       this.path = dirname.replace(/\\/g, '/');
@@ -72,18 +68,15 @@ export class Component {
   /**
    * Ajusta o diretório do componente - verifica se o mesmo inicia com um
    * número e o remove.
-   * 
+   *
    * O número no ínicio do nome da pasta serve para indicar a ordem de
    * criação dos componentes.
    *
-   * @param path Diretório do componente.
-   * @returns Diretório do componente ajustado.
+   * @param path diretório do componente
+   * @returns diretório do componente ajustado
    */
   private adjustDirname(dirname: string): string {
-    if (dirname.match(/\d.-/)) {
-      const split = dirname.split(path.sep).map(s => s.replace(/^\d.-/, ''));
-      dirname = split.join(path.sep);
-    }
+    if (dirname.match(/\d.-/)) return dirname.replace(/^\d.-/, '');
     return dirname;
   }
 }

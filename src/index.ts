@@ -1,10 +1,9 @@
 import { shim as flatMapShim } from 'array.prototype.flatmap';
 import defaults from 'defaults';
-import * as mustache from 'mustache';
+import mustache from 'mustache';
 import * as path from 'path';
 
 import { Converter } from './converter';
-import { Args, globals } from './helpers';
 import { defaultOptions, Options } from './options';
 
 // Adiciona o suporte ao "flatMap" para objetos do tipo Array.
@@ -19,9 +18,10 @@ flatMapShim();
  * @param options Configurações customizadas de conversão.
  */
 export = (srcPath: string, destDir: string, options?: Options) => {
+  srcPath = path.resolve(srcPath);
+  destDir = path.resolve(destDir);
   options = adjustOptions(srcPath, options);
-  globals.args = new Args(srcPath, destDir, options);
-  return new Converter().execute();
+  return new Converter(srcPath, destDir, options).execute();
 };
 
 /**
@@ -35,11 +35,11 @@ export = (srcPath: string, destDir: string, options?: Options) => {
  */
 function adjustOptions(srcPath: string, options: Options): Options {
   options = defaults(options, defaultOptions);
-  options.exclusions = options.exclusions.map(exclusion => path.resolve(srcPath, exclusion));
+  options.exclusions = options.exclusions.map((exclusion) => path.resolve(srcPath, exclusion));
 
   // Ajusta nomes gerados dinâmicamente.
   const adjust = JSON.stringify(options);
   options = JSON.parse(mustache.render(adjust, options));
-  
+
   return options;
 }

@@ -1,6 +1,5 @@
-export const module = () => `
-import { NgModule } from '@angular/core';
-import { PoModule } from '@portinari/portinari-ui';
+export const module = () => `import { NgModule } from '@angular/core';
+import { PoModule } from '@po-ui/ng-components';
 
 import { {{moduleClassName}}RoutingModule } from './{{moduleName}}-routing.module';
 import { {{moduleClassName}}Service } from './{{moduleName}}.service';

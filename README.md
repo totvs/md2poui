@@ -1,33 +1,38 @@
-# md2thf
+# md2poui
 
-Conversor de arquivos `markdown` para componentes `Angular` utilizando recursos visuais das bibliotecas [`Portinari UI`][portinariui].
+Conversor de arquivos `markdown` para componentes `Angular` utilizando recursos visuais das bibliotecas [`PO UI`][po-ui].
 
 ## Instalação
 
 ```bash
-npm install md2thf -g
+npm install md2poui -g
 ```
 
 ou
 
 ```bash
-npm install md2thf --save-dev
+npm install md2poui --save-dev
 ```
 
 ## Modo de uso
 
 ```javascript
-const md2thf = require('md2thf');
-md2thf('C:/pathFromMdFiles', 'C:/pathToAngularFiles');
+const md2poui = require('md2poui');
+md2poui('C:/pathFromMdFiles', 'C:/pathToAngularFiles');
 ```
 
 ou
 
 ```bash
-md2thf C:/pathFromMdFiles C:/pathToAngularFiles
+md2poui C:/pathFromMdFiles C:/pathToAngularFiles
 ```
 
 ## Release Notes
+
+### 3.0.0
+
+- Removido suporte ao `Portinari UI` e adicionado suporte somente ao **PO-UI**.
+- Removida a criação de âncoras, devido a limitação técnica do **PO-UI**.
 
 ### 2.0.2
 
@@ -73,7 +78,7 @@ md2thf C:/pathFromMdFiles C:/pathToAngularFiles
 
 ### 1.2.0
 
-- Adicionado suporte à execução do md2thf "globalmente" via linha de comando.
+- Adicionado suporte à execução do md2poui "globalmente" via linha de comando.
 
 ### 1.1.1 e 1.1.2
 
@@ -99,7 +104,7 @@ md2thf C:/pathFromMdFiles C:/pathToAngularFiles
 ## Parâmetros
 
 ```typescript
-function md2thf(srcPath: string, destDir: string, options?: Options): void {}
+function md2poui(srcPath: string, destDir: string, options?: Options): void {}
 ```
 
 ### `srcPath`
@@ -284,13 +289,13 @@ Além da conversão e criação dos componentes `Angular` são criados mais trê
 
 O arquivo de módulo agrega todos os componentes criados e o roteamento destes componentes - com o uso do arquivo de roteamento.
 
-Já o arquivo de serviço possui facilitadores para retornar a lista das rotas dos componentes no formato esperado pelo menu do [`Portinari UI`][po-menu].
+Já o arquivo de serviço possui facilitadores para retornar a lista das rotas dos componentes no formato esperado pelo menu do [`PO-UI`][po-menu].
 
 _Module_
 
 ```typescript
 import { NgModule } from '@angular/core';
-import { PoModule } from '@portinari/portinari-ui';
+import { PoModule } from '@po-ui/ng-components';
 
 import { WikiRoutingModule } from './wiki-routing.module';
 import { WikiService } from './wiki.service';
@@ -331,7 +336,7 @@ _Service_
 
 ```typescript
 import { Injectable } from '@angular/core';
-import { PoMenuItem } from '@portinari/portinari-ui';
+import { PoMenuItem } from '@po-ui/ng-components';
 
 @Injectable({
   providedIn: 'root'
@@ -366,9 +371,9 @@ Para que seja possível a visualização dos arquivos desta pasta pela aplicaç�
 }
 ```
 
-## Feito com md2thf
+## Feito com md2poui
 
-Toda a área de documentação do portal [**TOTVS Java Framework**](https://tjf.totvs.com.br) foi desenvolvida utilizando o `md2thf`.
+Toda a área de documentação do portal [**TOTVS Java Framework**](https://tjf.totvs.com.br) foi desenvolvida utilizando o `md2poui`.
 
-[portinariui]: https://portinari.io/
-[po-menu]: https://portinari.io/documentation/po-menu
+[po-ui]: https://po-ui.io/
+[po-menu]: https://po-ui.io/documentation/po-menu
