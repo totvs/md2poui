@@ -1,10 +1,10 @@
+import { Renderer } from 'marked';
 import * as path from 'path';
 import sanitize from 'sanitize-html';
 import { v1 as uuidv1 } from 'uuid';
 
 import { Options } from '../options';
 import { PoRendererData } from './poRendererData';
-import { Renderer } from 'marked';
 
 export class PoRenderer extends Renderer {
   public options: Options;
@@ -53,13 +53,15 @@ export class PoRenderer extends Renderer {
     // adiciona a uma lista para que depois seja possível recuperar e fazer a
     // conversão destes arquivos.
     const matches = /src=\"([^']*?)\"/g.exec(html);
-    matches
-      .slice(1)
-      .filter((m, i, l) => l.indexOf(m) === i) // Remove arquivos duplicados.
-      .filter((m) => m.indexOf('http') < 0) // Somente arquivos "internos".
-      .forEach((m) => (html = html.replace(new RegExp(m, 'g'), `${this.options.resourcePathName}/${this.addFile(m)}`)));
 
-    if (matches.length > 0) return this.adjustResourceHtml(html);
+    if (matches && matches.length > 0) {
+      matches
+        .slice(1)
+        .filter((m, i, l) => l.indexOf(m) === i) // Remove arquivos duplicados.
+        .filter((m) => m.indexOf('http') < 0) // Somente arquivos "internos".
+        .forEach((m) => (html = html.replace(new RegExp(m, 'g'), `${this.options.resourcePathName}/${this.addFile(m)}`)));
+      return this.adjustResourceHtml(html);
+    }
 
     return html;
   }

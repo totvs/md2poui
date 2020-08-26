@@ -8,6 +8,7 @@
     "test": "npx mocha ./test",
     "prebuild": "npx gulp -- prebuild",
     "build": "npx tsc --p tsconfig.app.json",
+    "build:prod": "npm run build && npx gulp uglify",
     "postbuild": "npx gulp -- postbuild && npm pack ./dist"
   },
   "bin": "bin/md2poui.js",
