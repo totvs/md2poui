@@ -8,7 +8,9 @@ export class {{moduleClassName}}Service {
   constructor() {}
 
   public getMenuItems(): PoMenuItem[] {
-    return {{&menuItems}};
+    return [
+      {{>menuItem}}
+    ];
   }
 }
 `;

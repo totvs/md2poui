@@ -3,7 +3,7 @@ import marked from 'marked';
 import mustache from 'mustache';
 import * as path from 'path';
 
-import { Component } from './component';
+import { Component, Components } from './component';
 import { Transform } from './helpers';
 import { Options } from './options';
 import { MarkdownFile, PoRenderer } from './renderer';
@@ -30,7 +30,7 @@ export class Converter {
   public execute(): void {
     if (this.options.home) this.createHomeFile();
 
-    const components = this.getMarkdownFiles().map((f, i, l) => new Component(this.srcPath, f, this.options, i < l.length - 1 ? '' : ','));
+    const components = this.getMarkdownFiles().map((f, i, l) => new Component(this.srcPath, f, this.options, i === l.length - 1 ? '' : ','));
     components.forEach((component) => this.createComponentFiles(component));
 
     if (this.options.createHelpers) {
@@ -142,10 +142,12 @@ export class Converter {
    *
    * @param components lista dos objetos com as informações dos componentes
    */
-  private createModuleFile(components: Component[]) {
+  private createModuleFile(components: Components) {
+    const imports = this.options.imports;
+    const home = this.options.home;
     const moduleName = this.options.moduleName;
     const moduleClassName = Transform.pascalCase(moduleName);
-    const content = mustache.render(templates.module(), { home: this.options.home, components, moduleName, moduleClassName });
+    const content = mustache.render(templates.module(), { imports, home, components, moduleName, moduleClassName });
     this.writeFile(path.join(this.destDir, `${this.options.moduleName}.module.ts`), content);
   }
 
@@ -155,10 +157,11 @@ export class Converter {
    *
    * @param components lista dos objetos com as informações dos componentes
    */
-  private createRouterFile(components: Component[]) {
+  private createRouterFile(components: Components) {
+    const home = this.options.home;
     const moduleName = this.options.moduleName;
     const moduleClassName = Transform.pascalCase(moduleName);
-    const content = mustache.render(templates.routing(), { home: this.options.home, components, moduleName, moduleClassName });
+    const content = mustache.render(templates.routing(), { home, components, moduleName, moduleClassName });
     this.writeFile(path.join(this.destDir, `${this.options.moduleName}-routing.module.ts`), content);
   }
 
@@ -168,15 +171,11 @@ export class Converter {
    *
    * @param components lista dos objetos com as informações dos componentes
    */
-  private createServiceFile(components: Component[]) {
-    // Define a estrutura do menu conforme o parâmetro 'options.flatDirs'.
-    const menu = this.loadMenuItems(components);
-    const menuItems = JSON.stringify(menu, null, 2).replace(/\"([^(\")"]+)\":/g, '$1:');
-
+  private createServiceFile(components: Components) {
+    const menuItems = this.loadMenuItems(components);
     const moduleName = this.options.moduleName;
     const moduleClassName = Transform.pascalCase(moduleName);
-
-    const content = mustache.render(templates.service(), { moduleClassName, menuItems });
+    const content = mustache.render(templates.service(), { moduleClassName, menuItems }, { menuItem: templates.menuItem() });
     this.writeFile(path.join(this.destDir, `${this.options.moduleName}.service.ts`), content);
   }
 
@@ -187,16 +186,12 @@ export class Converter {
    * @param components lista dos objetos com as informações dos componentes
    * @returns estrutura dos itens de menu
    */
-  private loadMenuItems(components: Component[]): MenuItem[] {
+  private loadMenuItems(components: Components): MenuItems {
     const menuItems: MenuItem[] = [];
 
-    for (let i = 0, len = components.length; i < len; i++) {
-      const component = components[i];
-
-      const menuItem = {} as MenuItem;
-      menuItem.label = component.getTitle();
-      menuItem.file = component.getFile();
-      menuItem.subItems = [];
+    components.forEach((component) => {
+      const label = component.getTitle() || component.getClassName();
+      const menuItem: MenuItem = { label, menuItems: [], file: component.getFile() };
 
       if (this.options.parentRoutePath && this.options.parentRoutePath.length > 0) {
         menuItem.link = `${this.options.parentRoutePath}/${component.getName()}`;
@@ -206,16 +201,14 @@ export class Converter {
 
       // Verifica se o componente atual é filho direto de algum componente
       // anterior.
-      const menuParent = this.options.flatDirs ? null : this.getMenuParent(menuItems, components[i]);
+      const parent = this.options.flatDirs ? null : this.getMenuParent(menuItems, component);
 
-      if (menuParent) {
-        menuParent.push(menuItem);
+      if (parent) {
+        parent.push(menuItem);
       } else {
         menuItems.push(menuItem);
       }
-    }
-
-    this.adjustMenuItems(menuItems);
+    });
 
     return menuItems;
   }
@@ -229,38 +222,23 @@ export class Converter {
    *
    * @returns estrutura do item de menu pai do componente informado
    */
-  private getMenuParent(menuItems: MenuItem[], component: Component): MenuItem[] {
+  private getMenuParent(menuItems: MenuItems, component: Component): MenuItems {
+    let parent: MenuItems = null;
+
     for (let i = 0, len = menuItems.length; i < len; i++) {
-      const dirname = path.dirname(menuItems[i].file);
+      const menuItem = menuItems[i];
+      const dirname = path.dirname(menuItem.file);
       const relative = path.relative(dirname, component.getFile());
 
       const regExp = new RegExp(`\\${path.sep}`, 'g'); // ^(?!\.\..*).*\\.*$
       const isChild = relative.indexOf('..') === -1 && (relative.match(regExp) || []).length === 1;
 
-      if (isChild) return menuItems[i].subItems;
-
-      if (menuItems[i].subItems.length > 0) return this.getMenuParent(menuItems[i].subItems, component);
+      if (isChild) return menuItem.menuItems;
+      if (menuItem.menuItems.length > 0) parent = this.getMenuParent(menuItem.menuItems, component);
+      if (parent) break;
     }
-  }
 
-  /**
-   * Ajusta os itens de menu removendo as informações incluídas de forma
-   * dinâmica para facilitar o desenvolvimento
-   *
-   * @param menuItems estrutura dos itens de menu
-   * @return estrutura dos itens de menu ajustados
-   */
-  private adjustMenuItems(menuItems: MenuItem[]) {
-    for (let i = 0, len = menuItems.length; i < len; i++) {
-      const menuItem = menuItems[i];
-      delete menuItem.file;
-
-      if (menuItem.subItems.length > 0) {
-        this.adjustMenuItems(menuItem.subItems);
-      } else {
-        delete menuItem.subItems;
-      }
-    }
+    return parent;
   }
 
   /**
@@ -302,4 +280,5 @@ export class Converter {
   }
 }
 
-type MenuItem = { label: string; link?: string; file: string; subItems: MenuItem[] };
+type MenuItem = { label: string; link?: string; menuItems: MenuItem[]; file: string };
+type MenuItems = MenuItem[];

@@ -80,3 +80,5 @@ export class Component {
     return dirname;
   }
 }
+
+export type Components = Component[];
