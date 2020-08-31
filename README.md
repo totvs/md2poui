@@ -137,7 +137,7 @@ Opções de configurações e definições customizadas de conversão dos arquiv
   parentRoutePath: string = '{{moduleName}}',
   copyExternalFiles: boolean = true,
   resourceFolderName: string = 'assets',
-  resourcePathName: string = 'src/app/{{moduleName}}/{{resourceFolderName}}'
+  resourcePathName: string = 'app/{{moduleName}}/{{resourceFolderName}}'
 }
 ```
 

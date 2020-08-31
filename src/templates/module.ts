@@ -16,9 +16,6 @@ import { {{className}}Component } from './{{&path}}/{{name}}.component';
 
 @NgModule({
   declarations: [
-    {{#imports}}
-    {{name}},
-    {{/imports}}
     {{#home}}
     {{moduleClassName}}HomeComponent,
     {{/home}}
@@ -26,8 +23,13 @@ import { {{className}}Component } from './{{&path}}/{{name}}.component';
     {{className}}Component{{delimiter}}
     {{/components}}
   ],
-  imports: [PoModule, {{moduleClassName}}RoutingModule],
-  providers: [{{moduleClassName}}Service]
+  imports: [
+    {{#imports}}
+    {{name}},
+    {{/imports}}
+    PoModule,
+    {{moduleClassName}}RoutingModule
+  ]
 })
 export class {{moduleClassName}}Module {}
 `;

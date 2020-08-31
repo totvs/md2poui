@@ -21,7 +21,7 @@ export class PoRenderer extends Renderer {
    * @override
    */
   public codespan(code: string): string {
-    return `<code>${this.escapeCode(code)}</code>`;
+    return `<code>${this.escapeCodespan(code)}</code>`;
   }
 
   /**
@@ -124,6 +124,10 @@ export class PoRenderer extends Renderer {
       .replace(/>/g, '&gt;')
       .replace(/{/g, '&#123;')
       .replace(/}/g, '&#125;');
+  }
+
+  private escapeCodespan(code: string): string {
+    return code.replace(/{/g, '&#123;').replace(/}/g, '&#125;');
   }
 
   private addFile(file: string): string {
