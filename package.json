@@ -1,56 +1,59 @@
 {
-  "name": "md2thf",
-  "version": "2.0.2",
-  "description": "Conversor de arquivos markdown para páginas Angular que utilizam a biblioteca TOTVS HTML Framework (THF)",
+  "name": "md2poui",
+  "version": "3.0.0",
+  "description": "Conversor de arquivos markdown para páginas Angular com suporte ao PO-UI",
   "main": "index.js",
   "scripts": {
-    "gulp": "node_modules/.bin/gulp",
-    "tsc": "node_modules/.bin/tsc",
-    "prebuild": "npm run gulp -- prebuild",
-    "build": "npm run tsc",
-    "postbuild": "npm run gulp -- postbuild && npm pack ./dist"
+    "pretest": "npx gulp pretest && npx tsc --p tsconfig.app.json",
+    "test": "npx mocha ./test",
+    "prebuild": "npx gulp -- prebuild",
+    "build": "npx tsc --p tsconfig.app.json",
+    "build:prod": "npm run build && npx gulp uglify",
+    "postbuild": "npx gulp -- postbuild && npm pack ./dist"
   },
-  "bin": "bin/md2thf.js",
+  "bin": "bin/md2poui.js",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/totvs/md2thf.git"
+    "url": "git+ssh://git@github.com/totvs/md2poui.git"
   },
   "keywords": [
     "totvs",
     "markdown",
     "angular",
     "thf",
-    "portinariui"
+    "po-ui"
   ],
   "author": "Rubens Dos Santos Filho",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/totvs/md2thf/issues"
+    "url": "https://github.com/totvs/md2poui/issues"
   },
-  "homepage": "https://github.com/totvs/md2thf#readme",
+  "homepage": "https://github.com/totvs/md2poui#readme",
   "dependencies": {
-    "array.prototype.flatmap": "^1.2.1",
+    "array.prototype.flatmap": "^1.2.3",
     "defaults": "^1.0.3",
-    "marked": "^0.7.0",
-    "mustache": "^3.1.0",
+    "marked": "^1.1.1",
+    "mustache": "^4.0.1",
     "node-emoji": "^1.10.0",
-    "sanitize-html": "^1.20.1",
-    "typescript": "^3.6.3",
-    "uuid": "^3.3.3",
-    "yargs": "^14.0.0"
+    "sanitize-html": "^1.27.3",
+    "typescript": "^4.0.2",
+    "uuid": "^8.3.0",
+    "yargs": "^15.4.1"
   },
   "devDependencies": {
-    "@types/array.prototype.flatmap": "^1.2.0",
-    "@types/defaults": "^1.0.2",
-    "@types/marked": "^0.6.5",
-    "@types/mustache": "^0.8.32",
-    "@types/node": "^12.7.8",
+    "@types/array.prototype.flatmap": "^1.2.2",
+    "@types/defaults": "^1.0.3",
+    "@types/marked": "^1.1.0",
+    "@types/mocha": "^8.0.3",
+    "@types/mustache": "^4.0.1",
+    "@types/node": "^14.6.0",
     "@types/node-emoji": "^1.8.1",
-    "@types/sanitize-html": "^1.20.2",
-    "@types/uuid": "^3.4.5",
-    "@types/yargs": "^13.0.3",
+    "@types/sanitize-html": "^1.23.3",
+    "@types/uuid": "^8.3.0",
+    "@types/yargs": "^15.0.5",
     "del": "^5.1.0",
     "gulp": "^4.0.2",
-    "gulp-uglify": "^3.0.2"
+    "gulp-uglify-es": "^2.0.0",
+    "mocha": "^8.1.1"
   }
 }

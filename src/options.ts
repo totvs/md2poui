@@ -1,12 +1,12 @@
 import { MarkedOptions } from 'marked';
 
-import { ThfRenderer } from './renderer';
+import { PoRenderer } from './renderer';
 
 export interface Options extends MarkedOptions {
   /**
    * @override
    */
-  renderer?: ThfRenderer;
+  renderer?: PoRenderer;
 
   /**
    * Lista dos arquivos/diretórios desconsiderados na conversão.
@@ -86,6 +86,13 @@ export interface Options extends MarkedOptions {
    * @default assets
    */
   resourcePathName?: string;
+
+  /**
+   * Módulos extras que serão incluídos como `imports` no módulo gerado.
+   *
+   * Exemplo: `imports: [{ name: 'SharedModule', path: '../shared' }]`
+   */
+  imports?: { name: string; path: string }[];
 }
 
 export const defaultOptions: Options = {
@@ -99,5 +106,6 @@ export const defaultOptions: Options = {
   parentRoutePath: '{{moduleName}}',
   copyExternalFiles: true,
   resourceFolderName: 'assets',
-  resourcePathName: 'app/{{moduleName}}/{{resourceFolderName}}'
+  resourcePathName: 'app/{{moduleName}}/{{resourceFolderName}}',
+  imports: [],
 };

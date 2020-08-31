@@ -1,4 +1,4 @@
-export interface ThfRendererData {
+export interface PoRendererData {
   /**
    * Título do arquivo `markdown` gerado a partir do primeiro `heading` de
    * primeiro nível encontrado.
@@ -8,5 +8,5 @@ export interface ThfRendererData {
   /**
    * Lista dos arquivos externos encontrados no arquivo `markdown`.
    */
-  files: { from: string, to: string }[]
+  files: { from: string; to: string }[];
 }
