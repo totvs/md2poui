@@ -32,7 +32,7 @@
   "dependencies": {
     "array.prototype.flatmap": "^1.2.3",
     "defaults": "^1.0.3",
-    "marked": "^1.1.1",
+    "marked": "^2.0.0",
     "mustache": "^4.0.1",
     "node-emoji": "^1.10.0",
     "sanitize-html": "^1.27.3",
